@@ -4,16 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-    <groupId>com.ruoyi</groupId>
-    <artifactId>ruoyi</artifactId>
+    <groupId>com.qinuo</groupId>
+    <artifactId>qinuo</artifactId>
     <version>3.8.4</version>
 
-    <name>ruoyi</name>
-    <url>http://www.ruoyi.vip</url>
+    <name>qinuo</name>
+    <url>http://www.qinuo.vip</url>
     <description>若依管理系统</description>
     
     <properties>
-        <ruoyi.version>3.8.4</ruoyi.version>
+        <qinuo.version>3.8.4</qinuo.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -32,6 +32,9 @@
         <poi.version>4.1.2</poi.version>
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
+        <weixin-java.version>4.4.0</weixin-java.version>
+        <hutool.version>5.1.0</hutool.version>
+        <atool.version>1.9.8</atool.version>
     </properties>
 	
     <!-- 依赖声明 -->
@@ -153,49 +156,100 @@
 
             <!-- 定时任务-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-quartz</artifactId>
-                <version>${ruoyi.version}</version>
+                <groupId>com.qinuo</groupId>
+                <artifactId>qinuo-quartz</artifactId>
+                <version>${qinuo.version}</version>
             </dependency>
 
             <!-- 代码生成-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-generator</artifactId>
-                <version>${ruoyi.version}</version>
+                <groupId>com.qinuo</groupId>
+                <artifactId>qinuo-generator</artifactId>
+                <version>${qinuo.version}</version>
             </dependency>
 
             <!-- 核心模块-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-framework</artifactId>
-                <version>${ruoyi.version}</version>
+                <groupId>com.qinuo</groupId>
+                <artifactId>qinuo-framework</artifactId>
+                <version>${qinuo.version}</version>
             </dependency>
 
             <!-- 系统模块-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-system</artifactId>
-                <version>${ruoyi.version}</version>
+                <groupId>com.qinuo</groupId>
+                <artifactId>qinuo-system</artifactId>
+                <version>${qinuo.version}</version>
             </dependency>
 
             <!-- 通用工具-->
             <dependency>
-                <groupId>com.ruoyi</groupId>
-                <artifactId>ruoyi-common</artifactId>
-                <version>${ruoyi.version}</version>
+                <groupId>com.qinuo</groupId>
+                <artifactId>qinuo-common</artifactId>
+                <version>${qinuo.version}</version>
+            </dependency>
+
+            <!-- 微信模块-->
+            <dependency>
+                <groupId>com.qinuo</groupId>
+                <artifactId>qinuo-wechat</artifactId>
+                <version>${qinuo.version}</version>
+            </dependency>
+
+            <!--weixin-java-common-->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-common</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+            <!--公众号（包括订阅号和服务号）： weixin-java-mp-->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-mp</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+            <!--微信小程序：weixin-java-miniapp-->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-miniapp</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+            <!--微信支付：weixin-java-pay-->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-pay</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+            <!--hutool-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <!-- 引入fluent-mybatis 运行依赖包, scope为compile -->
+            <dependency>
+                <groupId>com.github.atool</groupId>
+                <artifactId>fluent-mybatis</artifactId>
+                <version>${atool.version}</version>
+            </dependency>
+            <!-- 引入fluent-mybatis-processor, scope设置为provider 编译需要，运行时不需要 -->
+            <dependency>
+                <groupId>com.github.atool</groupId>
+                <artifactId>fluent-mybatis-processor</artifactId>
+                <version>${atool.version}</version>
             </dependency>
 
         </dependencies>
     </dependencyManagement>
 
     <modules>
-        <module>ruoyi-admin</module>
-        <module>ruoyi-framework</module>
-        <module>ruoyi-system</module>
-        <module>ruoyi-quartz</module>
-        <module>ruoyi-generator</module>
-        <module>ruoyi-common</module>
+        <module>qinuo-admin</module>
+        <module>qinuo-framework</module>
+        <module>qinuo-system</module>
+        <module>qinuo-quartz</module>
+        <module>qinuo-generator</module>
+        <module>qinuo-common</module>
+        <module>qinuo-wechat</module>
     </modules>
     <packaging>pom</packaging>
 

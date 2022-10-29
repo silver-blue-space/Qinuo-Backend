@@ -1,5 +1,5 @@
 {
-  "name": "ruoyi",
+  "name": "qinuo",
   "version": "3.8.4",
   "description": "若依管理系统",
   "author": "若依",
@@ -33,7 +33,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/y_project/RuoYi-Vue.git"
+    "url": "https://gitee.com/y_project/qinuo-Vue.git"
   },
   "dependencies": {
     "@riophae/vue-treeselect": "0.4.0",

@@ -6,10 +6,10 @@
 
 <script>
 export default {
-  name: 'RuoYiDoc',
+  name: 'qinuoDoc',
   data() {
     return {
-      url: 'http://doc.ruoyi.vip/ruoyi-vue'
+      url: 'http://doc.qinuo.vip/qinuo-vue'
     }
   },
   methods: {
