@@ -81,7 +81,11 @@
         </template>
       </el-table-column>
       <el-table-column label="门诊时长" align="center" prop="duration" />
-      <el-table-column label="背景颜色" align="center" prop="backgroundColor" />
+      <el-table-column label="背景颜色" align="center" prop="backgroundColor" >
+        <template slot-scope="scope">
+          <div v-if="scope.row.backgroundColor" :style="{height: '23px', width: '80px', borderRadius: '5px', backgroundColor: scope.row.backgroundColor}"></div>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -135,7 +139,7 @@
               v-for="dict in dict.type.sys_normal_disable"
               :key="dict.value"
               :label="dict.label"
-:value="parseInt(dict.value)"
+              :value="parseInt(dict.value)"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -143,7 +147,7 @@
           <el-input v-model="form.duration" placeholder="请输入门诊时长，单位分钟" />
         </el-form-item>
         <el-form-item label="背景颜色" prop="backgroundColor">
-          <el-input v-model="form.backgroundColor" placeholder="请输入背景颜色" />
+          <el-color-picker v-model="form.backgroundColor" :predefine="predefineColors"></el-color-picker>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
@@ -165,6 +169,21 @@ export default {
   dicts: ['sys_normal_disable'],
   data() {
     return {
+      //颜色
+      predefineColors: [
+        '#16a085',
+        '#27ae60',
+        '#2980b9',
+        '#2c3e50',
+        '#7f8c8d',
+        '#8e44ad',
+        '#bdc3c7',
+        '#c0392b',
+        '#d35400',
+        '#efa48b',
+        '#f39c12',
+        '#c7158577'
+      ],
       // 遮罩层
       loading: true,
       // 选中数组
