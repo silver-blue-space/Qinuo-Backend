@@ -38,13 +38,13 @@ public class FluentMyBatisGeneratorMain {
             /* Dao代码源目录 **/
             daoDir = "src/main/java",
             /* 如果表定义记录创建，记录修改，逻辑删除字段 **/
-            gmtCreated = "gmt_created", gmtModified = "gmt_modified", logicDeleted = "is_deleted",
+            gmtCreated = "create_time", gmtModified = "update_time", logicDeleted = "is_deleted",
             /* 需要生成文件的表 ( 表名称:对应的Entity名称 ) **/
             tables ={
                     @Table(value = "wx_user", columns = @Column(value = "tagid_list", javaType = String.class)),
                     @Table(
                     value = {
-                            "qn_scheduling"
+                            "qn_scheduling","qn_course","qn_doctor","qn_color"
                     }),
             }
     )

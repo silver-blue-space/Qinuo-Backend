@@ -240,10 +240,15 @@
                 <version>${atool.version}</version>
             </dependency>
 
-            <!-- 引入mapstruct -->
+            <!-- 引入mapstruct 包 -->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
                 <version>${org.mapstruct.version}</version>
             </dependency>
 
