@@ -107,6 +107,13 @@ public class WxUserServiceImpl  implements WxUserService {
 		return  wxUserDao.selectByOpenId(openId);
 	}
 
+	/***
+	 * 小程序用户登录
+	 * @param appId
+	 * @param jsCode
+	 * @return
+	 * @throws WxErrorException
+	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public WxUserEntity loginMa(String appId, String jsCode) throws WxErrorException {

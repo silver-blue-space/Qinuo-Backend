@@ -44,7 +44,7 @@ public class FluentMyBatisGeneratorMain {
                     @Table(value = "wx_user", columns = @Column(value = "tagid_list", javaType = String.class)),
                     @Table(
                     value = {
-                            "qn_scheduling","qn_course","qn_doctor","qn_color"
+                            "qn_scheduling","qn_course","qn_doctor"
                     }),
             }
     )
