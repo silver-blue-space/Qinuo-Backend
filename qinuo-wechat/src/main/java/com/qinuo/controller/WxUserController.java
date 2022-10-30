@@ -1,4 +1,4 @@
-package com.qinuo.controller.wechat;
+package com.qinuo.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;

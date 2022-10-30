@@ -6,6 +6,17 @@ package com.qinuo.constant;
  * 2019年1月21日
  */
 public interface ConfigConstant {
+
+
+	/**
+	 * 0：删除
+	 */
+	String DELETED_FLG_NO = "0";
+
+	/**
+	 * 1：已删除
+	 */
+	String DELETED_FLG_YES = "1";
 	
 	//订阅状态（0：已订阅；1：未订阅；2：网页授权用户）
 	/**

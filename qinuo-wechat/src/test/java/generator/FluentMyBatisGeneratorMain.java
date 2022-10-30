@@ -41,14 +41,11 @@ public class FluentMyBatisGeneratorMain {
             gmtCreated = "gmt_created", gmtModified = "gmt_modified", logicDeleted = "is_deleted",
             /* 需要生成文件的表 ( 表名称:对应的Entity名称 ) **/
             tables ={
-                    @Table(value = "wx_user", columns = @Column(value = "tagid_list", javaType = String.class))
-//                    @Table(
-//                    value = {
-//                            "wx_auto_reply",
-//                            "wx_user"
-//                    },
-//                    columns = @Column(value = "gender_man", javaType = Boolean.class)
-//            )
+                    @Table(value = "wx_user", columns = @Column(value = "tagid_list", javaType = String.class)),
+                    @Table(
+                    value = {
+                            "qn_scheduling"
+                    }),
             }
     )
     static class Abc {

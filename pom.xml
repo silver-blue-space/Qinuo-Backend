@@ -35,6 +35,7 @@
         <weixin-java.version>4.4.0</weixin-java.version>
         <hutool.version>5.1.0</hutool.version>
         <atool.version>1.9.8</atool.version>
+        <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
     </properties>
 	
     <!-- 依赖声明 -->
@@ -237,6 +238,13 @@
                 <groupId>com.github.atool</groupId>
                 <artifactId>fluent-mybatis-processor</artifactId>
                 <version>${atool.version}</version>
+            </dependency>
+
+            <!-- 引入mapstruct -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${org.mapstruct.version}</version>
             </dependency>
 
         </dependencies>
