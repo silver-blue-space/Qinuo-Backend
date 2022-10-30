@@ -1,6 +1,8 @@
 package com.qinuo.common.core.page;
 
+import com.github.pagehelper.Page;
 import com.qinuo.common.core.text.Convert;
+import com.qinuo.common.utils.PageUtils;
 import com.qinuo.common.utils.ServletUtils;
 
 /**
@@ -52,5 +54,16 @@ public class TableSupport
     public static PageDomain buildPageRequest()
     {
         return getPageDomain();
+    }
+
+
+    /**
+     * 返回page对象
+     * @return
+     */
+    public static Page getPage(){
+        PageUtils.startPage();
+        PageDomain domain = getPageDomain();
+        return new Page(domain.getPageNum(),domain.getPageSize());
     }
 }
