@@ -55,15 +55,4 @@ public class TableSupport
     {
         return getPageDomain();
     }
-
-
-    /**
-     * 返回page对象
-     * @return
-     */
-    public static Page getPage(){
-        PageUtils.startPage();
-        PageDomain domain = getPageDomain();
-        return new Page(domain.getPageNum(),domain.getPageSize());
-    }
 }

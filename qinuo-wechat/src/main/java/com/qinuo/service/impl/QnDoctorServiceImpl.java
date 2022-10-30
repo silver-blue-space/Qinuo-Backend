@@ -24,6 +24,7 @@ import com.qinuo.service.IQnDoctorService;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 医生管理Service业务层处理
@@ -56,25 +57,18 @@ public class QnDoctorServiceImpl implements IQnDoctorService
      * @return 医生管理
      */
     @Override
-    public TableDataInfo selectQnDoctorList(QnDoctor qnDoctor)
+    public List<QnDoctor> selectQnDoctorList(QnDoctor qnDoctor)
     {
-        Integer pageNum = Math.toIntExact(TableSupport.getPage().getStartRow());
-        Integer pageSize = TableSupport.getPage().getPageSize();
-
-        TableDataInfo rspData = new TableDataInfo();
-        rspData.setCode(HttpStatus.SUCCESS);
-        rspData.setMsg("查询成功");
-        rspData.setRows(Lists.newArrayList());
-        rspData.setTotal(0);
-
-        int total =  qnDoctorDao.countQnDoctor(qnDoctor);
-        if(total > 0) {
-            rspData.setTotal(total);
-            List<QnDoctorEntity> entities =  qnDoctorDao.selectQnDoctorList(qnDoctor, pageNum, pageSize);
-            rspData.setRows(entities.stream().map(QnDoctorConverter.INSTANCE::toQnDoctor).collect(Collectors.toList()));
+        List<QnDoctorEntity> entities =  qnDoctorDao.selectQnDoctorList(qnDoctor);
+        if(CollectionUtils.isEmpty(entities)){
+            return Lists.newArrayList();
         }
+        return entities.stream().map(QnDoctorConverter.INSTANCE::toQnDoctor).collect(Collectors.toList());
+    }
 
-        return rspData;
+    @Override
+    public int countQnDoctor(QnDoctor qnDoctor) {
+        return  qnDoctorDao.countQnDoctor(qnDoctor);
     }
 
     /**

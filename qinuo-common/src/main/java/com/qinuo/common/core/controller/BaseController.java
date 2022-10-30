@@ -3,6 +3,9 @@ package com.qinuo.common.core.controller;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
+import org.apache.commons.compress.utils.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -95,10 +98,11 @@ public class BaseController
      * 响应请求分页数据
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    protected TableDataInfo getDataTable(List<?> list, int totalCount)
+    protected TableDataInfo getDataTable(List<?> list, Integer totalCount)
     {
-        if(CollectionUtils.isEmpty(list)){
+        if(CollectionUtils.isEmpty(list) || Objects.isNull(totalCount)){
             totalCount = 0;
+            list = Lists.newArrayList();
         }
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(HttpStatus.SUCCESS);

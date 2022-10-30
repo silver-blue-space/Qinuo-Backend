@@ -25,9 +25,7 @@ public interface QnDoctorDao extends IBaseDao<QnDoctorEntity> {
     /**
      * 分页查询
      * @param qnDoctor
-     * @param pageNum
-     * @param pageSize
      * @return
      */
-    List<QnDoctorEntity> selectQnDoctorList(QnDoctor qnDoctor, Integer pageNum, Integer pageSize);
+    List<QnDoctorEntity> selectQnDoctorList(QnDoctor qnDoctor);
 }

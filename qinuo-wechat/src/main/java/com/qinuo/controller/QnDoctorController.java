@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.qinuo.domain.QnDoctor;
 import com.qinuo.service.IQnDoctorService;
+import org.apache.commons.compress.utils.Lists;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +43,13 @@ public class QnDoctorController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(QnDoctor qnDoctor)
     {
-        return qnDoctorService.selectQnDoctorList(qnDoctor);
+        int total =  qnDoctorService.countQnDoctor(qnDoctor);
+        if(total <= 0){
+            return getDataTable(Lists.newArrayList());
+        }
+        startPage();
+        List<QnDoctor> list = qnDoctorService.selectQnDoctorList(qnDoctor);
+        return  getDataTable(list,total);
     }
 
     /**
@@ -53,9 +60,9 @@ public class QnDoctorController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, QnDoctor qnDoctor)
     {
-        TableDataInfo info = qnDoctorService.selectQnDoctorList(qnDoctor);
+        List<QnDoctor> list = qnDoctorService.selectQnDoctorList(qnDoctor);
         ExcelUtil<QnDoctor> util = new ExcelUtil<QnDoctor>(QnDoctor.class);
-        util.exportExcel(response, (List<QnDoctor>) info.getRows(), "医生管理数据");
+        util.exportExcel(response, (List<QnDoctor>) list, "医生管理数据");
     }
 
     /**

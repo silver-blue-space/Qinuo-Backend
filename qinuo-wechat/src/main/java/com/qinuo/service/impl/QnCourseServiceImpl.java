@@ -5,15 +5,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.qinuo.common.annotation.Log;
 import com.qinuo.common.core.page.TableSupport;
 import com.qinuo.common.utils.DateUtils;
+import com.qinuo.common.utils.PageUtils;
 import com.qinuo.coverter.QnCourseConverter;
 import com.qinuo.dao.intf.QnCourseDao;
 import com.qinuo.entity.QnCourseEntity;
 import org.apache.commons.compress.utils.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.qinuo.mapper.QnCourseMapper;
 import com.qinuo.domain.QnCourse;
 import com.qinuo.service.IQnCourseService;
 import org.springframework.util.CollectionUtils;
@@ -27,6 +31,8 @@ import org.springframework.util.CollectionUtils;
 @Service
 public class QnCourseServiceImpl implements IQnCourseService 
 {
+    private static final Logger log = LoggerFactory.getLogger(QnCourseServiceImpl.class);
+
     @Autowired
     private QnCourseDao qnCourseDao;
 
@@ -52,9 +58,7 @@ public class QnCourseServiceImpl implements IQnCourseService
     @Override
     public List<QnCourse> selectQnCourseList(QnCourse qnCourse)
     {
-        Integer pageNum = Math.toIntExact(TableSupport.getPage().getStartRow());
-        Integer pageSize = TableSupport.getPage().getPageSize();
-        List<QnCourseEntity> entities =  qnCourseDao.selectQnCourseList(qnCourse,pageNum,pageSize);
+        List<QnCourseEntity> entities =  qnCourseDao.selectQnCourseList(qnCourse);
         if(CollectionUtils.isEmpty(entities)){
             return Lists.newArrayList();
         }
@@ -79,6 +83,7 @@ public class QnCourseServiceImpl implements IQnCourseService
     @Override
     public int insertQnCourse(QnCourse qnCourse)
     {
+        log.info("QnCourseServiceImpl#insertQnCourse param is s%", JSONObject.toJSONString(qnCourse));
         qnCourse.setCreateTime(DateUtils.getNowDate());
         QnCourseEntity entity = QnCourseConverter.INSTANCE.toQnCourseEntity(qnCourse);
         Long id = qnCourseDao.save(entity) ;

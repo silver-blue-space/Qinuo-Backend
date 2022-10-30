@@ -43,11 +43,11 @@ public class QnCourseController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(QnCourse qnCourse)
     {
-        startPage();
         int total =  qnCourseService.countQnDoctor(qnCourse);
         if(total <= 0){
             return getDataTable(Lists.newArrayList());
         }
+        startPage();
         List<QnCourse> list = qnCourseService.selectQnCourseList(qnCourse);
         return  getDataTable(list,total);
     }

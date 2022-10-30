@@ -27,8 +27,15 @@ public interface IQnDoctorService
      * @param qnDoctor 医生管理
      * @return 医生管理集合
      */
-    TableDataInfo selectQnDoctorList(QnDoctor qnDoctor);
+    List<QnDoctor> selectQnDoctorList(QnDoctor qnDoctor);
 
+
+    /**
+     * 查询总件数
+     * @param qnDoctor
+     * @return
+     */
+    int countQnDoctor(QnDoctor qnDoctor);
     /**
      * 新增医生管理
      * 

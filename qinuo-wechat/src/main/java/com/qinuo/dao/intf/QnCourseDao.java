@@ -25,9 +25,7 @@ public interface QnCourseDao extends IBaseDao<QnCourseEntity> {
     /**
      * 分页查询门诊总件数
      * @param qnCourse
-     * @param pageNum
-     * @param pageSize
      * @return
      */
-    List<QnCourseEntity> selectQnCourseList(QnCourse qnCourse, Integer pageNum, Integer pageSize);
+    List<QnCourseEntity> selectQnCourseList(QnCourse qnCourse);
 }

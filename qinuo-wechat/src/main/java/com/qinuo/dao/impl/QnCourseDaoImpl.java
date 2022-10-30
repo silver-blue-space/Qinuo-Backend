@@ -29,13 +29,12 @@ public class QnCourseDaoImpl extends QnCourseBaseDao implements QnCourseDao {
     }
 
     @Override
-    public List<QnCourseEntity> selectQnCourseList(QnCourse param, Integer pageNum, Integer pageSize) {
+    public List<QnCourseEntity> selectQnCourseList(QnCourse param) {
         return this.query()
                 .where
                 .enableState().eq(param.getEnableState(), If::notBlank)
                 .and.name().like(param.getName(),If::notBlank)
                 .end()
-                .limit(pageNum,pageSize)
                 .execute(this::listEntity);
     }
 }

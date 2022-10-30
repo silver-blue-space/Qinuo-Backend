@@ -35,7 +35,7 @@ public class QnDoctorDaoImpl extends QnDoctorBaseDao implements QnDoctorDao {
     }
 
     @Override
-    public List<QnDoctorEntity> selectQnDoctorList(QnDoctor param, Integer pageNum, Integer pageSize) {
+    public List<QnDoctorEntity> selectQnDoctorList(QnDoctor param) {
         return this.query()
                 .where
                 .enableState().eq(param.getEnableState(),If::notBlank)
@@ -45,7 +45,6 @@ public class QnDoctorDaoImpl extends QnDoctorBaseDao implements QnDoctorDao {
                 .and.sysUserId().eq(param.getSysUserId(),If::notNull)
                 .and.title().eq(param.getTitle(),If::notBlank)
                 .end()
-                .limit(pageNum,pageSize)
                 .execute(this::listEntity);
     }
 }
