@@ -1,5 +1,8 @@
 package com.qinuo.common.core.page;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,6 +11,8 @@ import java.util.List;
  * 
  * @author qinuo
  */
+@Data
+@Accessors(chain = true)
 public class TableDataInfo implements Serializable
 {
     private static final long serialVersionUID = 1L;

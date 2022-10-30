@@ -28,6 +28,8 @@ public class QnDoctorDaoImpl extends QnDoctorBaseDao implements QnDoctorDao {
                 .and.showFlg().eq(param.getShowFlg(),If::notBlank)
                 .and.expertise().like(param.getExpertise(),If::notBlank)
                 .and.introduce().like(param.getIntroduce(),If::notBlank)
+                .and.sysUserId().eq(param.getSysUserId(),If::notNull)
+                .and.title().eq(param.getTitle(),If::notBlank)
                 .end()
                 .execute(this::count);
     }
@@ -40,6 +42,8 @@ public class QnDoctorDaoImpl extends QnDoctorBaseDao implements QnDoctorDao {
                 .and.showFlg().eq(param.getShowFlg(),If::notBlank)
                 .and.expertise().like(param.getExpertise(),If::notBlank)
                 .and.introduce().like(param.getIntroduce(),If::notBlank)
+                .and.sysUserId().eq(param.getSysUserId(),If::notNull)
+                .and.title().eq(param.getTitle(),If::notBlank)
                 .end()
                 .limit(pageNum,pageSize)
                 .execute(this::listEntity);
