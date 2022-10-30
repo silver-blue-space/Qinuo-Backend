@@ -1,6 +1,8 @@
 package com.qinuo.entity;
 
 import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
+import cn.org.atool.fluent.mybatis.annotation.GmtCreate;
+import cn.org.atool.fluent.mybatis.annotation.GmtModified;
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
@@ -69,12 +71,6 @@ public class WxUserEntity extends RichEntity {
       desc = "创建者"
   )
   private String createId;
-
-  @TableField(
-      value = "create_time",
-      desc = "创建时间"
-  )
-  private Date createTime;
 
   @TableField(
       value = "del_flag",
@@ -209,9 +205,20 @@ public class WxUserEntity extends RichEntity {
   private String updateId;
 
   @TableField(
+      value = "create_time",
+      insert = "now()",
+      desc = "创建时间"
+  )
+  @GmtCreate
+  private Date createTime;
+
+  @TableField(
       value = "update_time",
+      insert = "now()",
+      update = "now()",
       desc = "更新时间"
   )
+  @GmtModified
   private Date updateTime;
 
   @Override

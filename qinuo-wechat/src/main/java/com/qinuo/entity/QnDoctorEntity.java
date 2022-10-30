@@ -1,9 +1,12 @@
 package com.qinuo.entity;
 
 import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
+import cn.org.atool.fluent.mybatis.annotation.GmtCreate;
+import cn.org.atool.fluent.mybatis.annotation.GmtModified;
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,6 +42,12 @@ public class QnDoctorEntity extends RichEntity {
   private Long id;
 
   @TableField(
+      value = "create_by",
+      desc = "创建者"
+  )
+  private String createBy;
+
+  @TableField(
       value = "enable_state",
       desc = "停启用状态，1启用 2停用"
   )
@@ -55,6 +64,12 @@ public class QnDoctorEntity extends RichEntity {
       desc = "医生介绍"
   )
   private String introduce;
+
+  @TableField(
+      value = "remark",
+      desc = "备注"
+  )
+  private String remark;
 
   @TableField(
       value = "show_flg",
@@ -79,6 +94,29 @@ public class QnDoctorEntity extends RichEntity {
       desc = "职称"
   )
   private String title;
+
+  @TableField(
+      value = "update_by",
+      desc = "更新者"
+  )
+  private String updateBy;
+
+  @TableField(
+      value = "create_time",
+      insert = "now()",
+      desc = "创建时间"
+  )
+  @GmtCreate
+  private Date createTime;
+
+  @TableField(
+      value = "update_time",
+      insert = "now()",
+      update = "now()",
+      desc = "更新时间"
+  )
+  @GmtModified
+  private Date updateTime;
 
   @Override
   public final Class entityClass() {

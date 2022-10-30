@@ -3,13 +3,19 @@ package com.qinuo.service.impl;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.google.gson.JsonObject;
 import com.qinuo.common.constant.HttpStatus;
 import com.qinuo.common.core.page.PageDomain;
 import com.qinuo.common.core.page.TableDataInfo;
 import com.qinuo.common.core.page.TableSupport;
+import com.qinuo.common.utils.PageUtils;
+import com.qinuo.common.utils.SecurityUtils;
+import com.qinuo.common.utils.sql.SqlUtil;
 import com.qinuo.coverter.QnDoctorConverter;
 import com.qinuo.dao.intf.QnDoctorDao;
 import com.qinuo.domain.QnDoctor;
@@ -52,9 +58,8 @@ public class QnDoctorServiceImpl implements IQnDoctorService
     @Override
     public TableDataInfo selectQnDoctorList(QnDoctor qnDoctor)
     {
-        PageDomain pageDomain = TableSupport.buildPageRequest();
-        Integer pageNum = pageDomain.getPageNum();
-        Integer pageSize = pageDomain.getPageSize();
+        Integer pageNum = Math.toIntExact(TableSupport.getPage().getStartRow());
+        Integer pageSize = TableSupport.getPage().getPageSize();
 
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(HttpStatus.SUCCESS);
@@ -66,6 +71,7 @@ public class QnDoctorServiceImpl implements IQnDoctorService
         if(total > 0) {
             rspData.setTotal(total);
             List<QnDoctorEntity> entities =  qnDoctorDao.selectQnDoctorList(qnDoctor, pageNum, pageSize);
+            rspData.setRows(entities.stream().map(QnDoctorConverter.INSTANCE::toQnDoctor).collect(Collectors.toList()));
         }
 
         return rspData;
@@ -81,8 +87,17 @@ public class QnDoctorServiceImpl implements IQnDoctorService
     public int insertQnDoctor(QnDoctor qnDoctor)
     {
         QnDoctorEntity saveEntity = QnDoctorConverter.INSTANCE.toQnDoctorEntity(qnDoctor);
+        saveEntity.setCreateBy(getUsername());
         Long id = qnDoctorDao.save(saveEntity) ;
         return Objects.nonNull(id) ? 1 : 0;
+    }
+
+    /**
+     * 获取当前登录用户名
+     * @return
+     */
+    private String getUsername() {
+        return SecurityUtils.getLoginUser().getUsername();
     }
 
     /**
@@ -94,7 +109,9 @@ public class QnDoctorServiceImpl implements IQnDoctorService
     @Override
     public int updateQnDoctor(QnDoctor qnDoctor)
     {
-        return qnDoctorDao.updateById(QnDoctorConverter.INSTANCE.toQnDoctorEntity(qnDoctor))? 1 : 0;
+        QnDoctorEntity saveEntity = QnDoctorConverter.INSTANCE.toQnDoctorEntity(qnDoctor);
+        saveEntity.setUpdateBy(getUsername());
+        return qnDoctorDao.updateById(saveEntity)? 1 : 0;
     }
 
     /**

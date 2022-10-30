@@ -24,7 +24,7 @@ public class QnDoctorDaoImpl extends QnDoctorBaseDao implements QnDoctorDao {
     public int countQnDoctor(QnDoctor param) {
         return this.query()
                 .where
-                .enableState().eq(param.getEnableState())
+                .enableState().eq(param.getEnableState(),If::notBlank)
                 .and.showFlg().eq(param.getShowFlg(),If::notBlank)
                 .and.expertise().like(param.getExpertise(),If::notBlank)
                 .and.introduce().like(param.getIntroduce(),If::notBlank)
@@ -36,7 +36,7 @@ public class QnDoctorDaoImpl extends QnDoctorBaseDao implements QnDoctorDao {
     public List<QnDoctorEntity> selectQnDoctorList(QnDoctor param, Integer pageNum, Integer pageSize) {
         return this.query()
                 .where
-                .enableState().eq(param.getEnableState())
+                .enableState().eq(param.getEnableState(),If::notBlank)
                 .and.showFlg().eq(param.getShowFlg(),If::notBlank)
                 .and.expertise().like(param.getExpertise(),If::notBlank)
                 .and.introduce().like(param.getIntroduce(),If::notBlank)

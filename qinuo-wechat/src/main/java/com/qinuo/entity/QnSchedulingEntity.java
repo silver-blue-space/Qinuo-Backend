@@ -1,6 +1,8 @@
 package com.qinuo.entity;
 
 import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
+import cn.org.atool.fluent.mybatis.annotation.GmtCreate;
+import cn.org.atool.fluent.mybatis.annotation.GmtModified;
 import cn.org.atool.fluent.mybatis.annotation.LogicDelete;
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
@@ -65,12 +67,6 @@ public class QnSchedulingEntity extends RichEntity {
   private String createBy;
 
   @TableField(
-      value = "create_time",
-      desc = "创建时间"
-  )
-  private Date createTime;
-
-  @TableField(
       value = "dept_id",
       desc = "医院科室ID"
   )
@@ -113,9 +109,20 @@ public class QnSchedulingEntity extends RichEntity {
   private String updateBy;
 
   @TableField(
+      value = "create_time",
+      insert = "now()",
+      desc = "创建时间"
+  )
+  @GmtCreate
+  private Date createTime;
+
+  @TableField(
       value = "update_time",
+      insert = "now()",
+      update = "now()",
       desc = "更新时间"
   )
+  @GmtModified
   private Date updateTime;
 
   @TableField(
