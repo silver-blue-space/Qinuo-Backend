@@ -1,13 +1,17 @@
 package com.qinuo.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
+import com.qinuo.common.core.domain.entity.SysUser;
 import com.qinuo.domain.QnDoctor;
 import com.qinuo.service.IQnDoctorService;
+import com.qinuo.system.service.ISysUserService;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,9 +39,11 @@ public class QnDoctorController extends BaseController
 {
     @Autowired
     private IQnDoctorService qnDoctorService;
+    @Autowired
+    private ISysUserService userService;
 
     /**
-     * 查询医生管理列表
+     * 分页查询医生管理列表
      */
     @PreAuthorize("@ss.hasPermi('doctor:doctor:list')")
     @GetMapping("/list")
@@ -52,6 +58,31 @@ public class QnDoctorController extends BaseController
         return  getDataTable(list,total);
     }
 
+    /**
+     * 医生(从用户选择后的)下拉列表
+     */
+    @PreAuthorize("@ss.hasPermi('doctor:doctor:list')")
+    @GetMapping("/selections")
+    public AjaxResult list()
+    {
+        QnDoctor qnDoctor = new QnDoctor();
+        qnDoctor.setEnableState("0");//有效
+        List<QnDoctor> list = qnDoctorService.selectQnDoctorList(qnDoctor);
+        if(CollectionUtils.isEmpty(list)){
+            AjaxResult.success(Lists.newArrayList());
+        }
+        List<Long> sysUserIds = list.stream().map(QnDoctor::getSysUserId).collect(Collectors.toList());
+        SysUser user =  new SysUser();
+        user.setDelFlag("0");
+        user.setStatus("0");
+        List<SysUser> userList = userService.selectUserList(user);
+        if(CollectionUtils.isEmpty(userList)){
+            AjaxResult.success(Lists.newArrayList());
+        }
+        List<SysUser> rtn = userList.stream().filter(e -> sysUserIds.contains(e.getUserId())).collect(Collectors.toList());
+        return AjaxResult.success(rtn);
+
+    }
     /**
      * 导出医生管理列表
      */

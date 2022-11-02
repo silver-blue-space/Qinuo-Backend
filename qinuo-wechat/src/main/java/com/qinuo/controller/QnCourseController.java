@@ -51,6 +51,22 @@ public class QnCourseController extends BaseController
         List<QnCourse> list = qnCourseService.selectQnCourseList(qnCourse);
         return  getDataTable(list,total);
     }
+    /**
+     * 查询门诊科目列表(下拉列表)
+     */
+    @PreAuthorize("@ss.hasPermi('doctor:course:list')")
+    @GetMapping("/selections")
+    public AjaxResult list()
+    {
+        QnCourse qnCourse = new QnCourse();
+        qnCourse.setEnableState("0");
+        int total =  qnCourseService.countQnDoctor(qnCourse);
+        if(total <= 0){
+            AjaxResult.success(Lists.newArrayList());
+        }
+        List<QnCourse> list = qnCourseService.selectQnCourseList(qnCourse);
+        return AjaxResult.success(list);
+    }
 
     /**
      * 导出门诊科目列表
