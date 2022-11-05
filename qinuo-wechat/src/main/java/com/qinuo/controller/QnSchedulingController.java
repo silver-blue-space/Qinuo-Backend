@@ -1,14 +1,16 @@
 package com.qinuo.controller;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
 import com.qinuo.common.core.page.PageDomain;
 import com.qinuo.common.core.page.TableSupport;
-import com.qinuo.common.utils.PageUtils;
+import com.qinuo.domain.QnSchedulingBatchSave;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -52,6 +54,18 @@ public class QnSchedulingController extends BaseController
         Integer pageSize = pageDomain.getPageSize();
         return qnSchedulingService.selectQnSchedulingList(qnScheduling,pageNum,pageSize);
     }
+    /**
+     * 排班日历
+     * 查询排班管理列表
+     */
+    @PreAuthorize("@ss.hasPermi('doctor:scheduling:list')")
+    @GetMapping("/calendar/list")
+    public AjaxResult listSchedulingCalendarList(QnScheduling query) {
+
+        List<QnScheduling> list =  qnSchedulingService.selectQnSchedulingList(query);
+        Map<String,Long> scheduleCount = list.stream().collect(Collectors.groupingBy(QnScheduling::getSchedulDate, Collectors.counting()));
+        return AjaxResult.success(list).put("scheduleCount",scheduleCount);
+    }
 
     /**
      * 导出排班管理列表
@@ -85,6 +99,14 @@ public class QnSchedulingController extends BaseController
     public AjaxResult add(@RequestBody QnScheduling qnScheduling)
     {
         return toAjax(qnSchedulingService.insertQnScheduling(qnScheduling));
+    }
+
+    @PreAuthorize("@ss.hasPermi('doctor:scheduling:add')")
+    @Log(title = "批量新增管理", businessType = BusinessType.INSERT)
+    @PostMapping("/batch")
+    public AjaxResult saveCourseScheduling(@Validated @RequestBody QnSchedulingBatchSave saveDTO) {
+
+        return qnSchedulingService.batchSaveCourseScheduling(saveDTO);
     }
 
     /**

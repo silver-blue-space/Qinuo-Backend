@@ -7,6 +7,7 @@ import com.qinuo.domain.QnScheduling;
 import com.qinuo.entity.QnSchedulingEntity;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -30,12 +31,12 @@ public class QnSchedulingDaoImpl extends QnSchedulingBaseDao implements QnSchedu
     public List<QnSchedulingEntity> selectQnSchedulingList(QnScheduling param, Integer pageNum, Integer pageSize) {
         return this.query()
                 .where.isDeleted().isFalse()
-                .and.accountId().eq(param.getAccountId(), If::notNull)
-                .and.deptId().eq(param.getDeptId(), If::notNull)
+                .and.userId().eq(param.getUserId(), If::notNull)
+                .and.courseId().eq(param.getCourseId(), If::notNull)
                 .and.schedulDate().eq(param.getSchedulDate(), If::notNull)
-                .and.ampm().eq(param.getAmpm(),If::notBlank)
-                .and.period().eq(param.getPeriod(),If::notBlank)
                 .and.clinicType().eq(param.getClinicType(),If::notBlank)
+                .and.attendTime().eq(param.getAttendTime(),If::notNull)
+                .and.finishTime().eq(param.getFinishTime(),If::notNull)
                 .and.status().eq(param.getStatus(),If::notBlank)
                 .and.ticketCount().eq(param.getTicketCount(),If::notNull)
                 .end()
@@ -52,12 +53,12 @@ public class QnSchedulingDaoImpl extends QnSchedulingBaseDao implements QnSchedu
     public int countQnSchedulingList(QnScheduling param) {
         return this.query()
                 .where.isDeleted().isFalse()
-                .and.accountId().eq(param.getAccountId(), If::notNull)
-                .and.deptId().eq(param.getDeptId(), If::notNull)
+                .and.userId().eq(param.getUserId(), If::notNull)
+                .and.courseId().eq(param.getCourseId(), If::notNull)
                 .and.schedulDate().eq(param.getSchedulDate(), If::notNull)
-                .and.ampm().eq(param.getAmpm(),If::notBlank)
-                .and.period().eq(param.getPeriod(),If::notBlank)
                 .and.clinicType().eq(param.getClinicType(),If::notBlank)
+                .and.attendTime().eq(param.getAttendTime(),If::notNull)
+                .and.finishTime().eq(param.getFinishTime(),If::notNull)
                 .and.status().eq(param.getStatus(),If::notBlank)
                 .and.ticketCount().eq(param.getTicketCount(),If::notNull)
                 .end()
@@ -73,14 +74,25 @@ public class QnSchedulingDaoImpl extends QnSchedulingBaseDao implements QnSchedu
     public List<QnSchedulingEntity> selectQnSchedulingList(QnScheduling param) {
         return this.query()
                 .where.isDeleted().isFalse()
-                .and.accountId().eq(param.getAccountId(), If::notNull)
-                .and.deptId().eq(param.getDeptId(), If::notNull)
+                .and.id().eq(param.getId(), If::notNull)
+                .and.userId().eq(param.getUserId(), If::notNull)
+                .and.courseId().eq(param.getCourseId(), If::notNull)
                 .and.schedulDate().eq(param.getSchedulDate(), If::notNull)
-                .and.ampm().eq(param.getAmpm(),If::notBlank)
-                .and.period().eq(param.getPeriod(),If::notBlank)
                 .and.clinicType().eq(param.getClinicType(),If::notBlank)
+                .and.attendTime().eq(param.getAttendTime(),If::notNull)
+                .and.finishTime().eq(param.getFinishTime(),If::notNull)
                 .and.status().eq(param.getStatus(),If::notBlank)
                 .and.ticketCount().eq(param.getTicketCount(),If::notNull)
+                .end()
+                .execute(this::listEntity);
+    }
+
+    @Override
+    public List<QnSchedulingEntity> selectCourseSchedulingList(Long userId, List<LocalDate> dateList) {
+        return this.query()
+                .where.isDeleted().isFalse()
+                .and.userId().eq(userId)
+                .and.schedulDate().in(dateList)
                 .end()
                 .execute(this::listEntity);
     }

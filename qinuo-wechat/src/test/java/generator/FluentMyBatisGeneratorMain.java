@@ -12,6 +12,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.test4j.module.database.proxy.DataSourceCreator;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 public class FluentMyBatisGeneratorMain {
     static final String url = "jdbc:mysql://localhost:3306/qinuo?useSSL=false&useUnicode=true&characterEncoding=utf-8";
 
@@ -42,9 +46,10 @@ public class FluentMyBatisGeneratorMain {
             /* 需要生成文件的表 ( 表名称:对应的Entity名称 ) **/
             tables ={
                     @Table(value = "wx_user", columns = @Column(value = "tagid_list", javaType = String.class)),
+                    @Table(value = "qn_scheduling", columns = {@Column(value = {"attend_time","finish_time"}, javaType = LocalTime.class),@Column(value = {"schedul_date"}, javaType = LocalDate.class)}),
                     @Table(
                     value = {
-                            "qn_scheduling","qn_course","qn_doctor"
+                            "qn_course","qn_course","qn_doctor"
                     }),
             }
     )

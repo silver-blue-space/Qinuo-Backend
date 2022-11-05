@@ -2,8 +2,10 @@ package com.qinuo.service;
 
 import java.util.List;
 
+import com.qinuo.common.core.domain.AjaxResult;
 import com.qinuo.common.core.page.TableDataInfo;
 import com.qinuo.domain.QnScheduling;
+import com.qinuo.domain.QnSchedulingBatchSave;
 import org.springframework.stereotype.Service;
 
 /**
@@ -71,4 +73,11 @@ public interface IQnSchedulingService
      * @return 结果
      */
     public int deleteQnSchedulingById(Long id);
+
+    /**
+     * 批量新增管理
+     * @param saveDTO
+     * @return
+     */
+    AjaxResult batchSaveCourseScheduling(QnSchedulingBatchSave saveDTO);
 }

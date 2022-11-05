@@ -7,6 +7,8 @@ import cn.org.atool.fluent.mybatis.annotation.LogicDelete;
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,16 +45,10 @@ public class QnSchedulingEntity extends RichEntity {
   private Long id;
 
   @TableField(
-      value = "account_id",
-      desc = "用户ID"
+      value = "attend_time",
+      desc = "门诊开始时间"
   )
-  private Long accountId;
-
-  @TableField(
-      value = "ampm",
-      desc = "上午/下午/夜晚"
-  )
-  private String ampm;
+  private LocalTime attendTime;
 
   @TableField(
       value = "clinic_type",
@@ -61,22 +57,22 @@ public class QnSchedulingEntity extends RichEntity {
   private String clinicType;
 
   @TableField(
+      value = "course_id",
+      desc = "门诊科目ID"
+  )
+  private Long courseId;
+
+  @TableField(
       value = "create_by",
       desc = "创建者"
   )
   private String createBy;
 
   @TableField(
-      value = "dept_id",
-      desc = "医院科室ID"
+      value = "finish_time",
+      desc = "门诊结束时间"
   )
-  private Long deptId;
-
-  @TableField(
-      value = "period",
-      desc = "时段"
-  )
-  private String period;
+  private LocalTime finishTime;
 
   @TableField(
       value = "remark",
@@ -88,7 +84,7 @@ public class QnSchedulingEntity extends RichEntity {
       value = "schedul_date",
       desc = "值班日期"
   )
-  private Date schedulDate;
+  private LocalDate schedulDate;
 
   @TableField(
       value = "status",
@@ -107,6 +103,12 @@ public class QnSchedulingEntity extends RichEntity {
       desc = "更新者"
   )
   private String updateBy;
+
+  @TableField(
+      value = "user_id",
+      desc = "用户ID"
+  )
+  private Long userId;
 
   @TableField(
       value = "create_time",

@@ -4,7 +4,6 @@
  */
 package com.qinuo.api;
 
-import com.qinuo.Ref;
 import com.qinuo.common.core.domain.AjaxResult;
 import com.qinuo.entity.LoginMaDTO;
 import com.qinuo.entity.WxOpenDataDTO;

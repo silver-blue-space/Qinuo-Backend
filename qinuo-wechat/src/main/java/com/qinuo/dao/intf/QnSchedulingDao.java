@@ -4,6 +4,7 @@ import cn.org.atool.fluent.mybatis.base.IBaseDao;
 import com.qinuo.domain.QnScheduling;
 import com.qinuo.entity.QnSchedulingEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -38,4 +39,12 @@ public interface QnSchedulingDao extends IBaseDao<QnSchedulingEntity> {
      * @return
      */
     List<QnSchedulingEntity> selectQnSchedulingList(QnScheduling qnScheduling);
+
+    /**
+     * 医生排班冲突检查
+     * @param userId 医生id
+     * @param dateList 排班日期
+     * @return
+     */
+    List<QnSchedulingEntity> selectCourseSchedulingList(Long userId, List<LocalDate> dateList);
 }

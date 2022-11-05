@@ -1,8 +1,6 @@
 package com.qinuo.utils;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
@@ -23,6 +21,7 @@ public class LocalDateTimeUtils {
 	public static final String YYYY_MM_DD_HH = "yyyy-MM-dd HH";
 	public static final String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
 	public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+	public static final String HH_MM = "HH:mm";
 
 	private static final String BASE_TIME_FORMAT = "[yyyyMMddHHmmss][yyyyMMddHHmm][yyyyMMddHH][yyyyMMdd][yyyyMM][yyyy][[-][/][.]MM][[-][/][.]dd][ ][HH][[:][.]mm][[:][.]ss][[:][.]SSS]";
 	/**
@@ -83,6 +82,29 @@ public class LocalDateTimeUtils {
 	public static long datatimeToTimestamp(LocalDateTime ldt){
 		ZoneId zone = ZoneId.systemDefault();
 		return ldt.atZone(zone).toInstant().toEpochMilli();
+	}
+
+	public static String localDateToString(LocalDate date, String pattern) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+		return formatter.format(date);
+	}
+	public static LocalDate stringToLocalDate(String time) {
+		return LocalDate.parse(time);
+	}
+
+
+	public static String localTimeToString(LocalTime time, String pattern) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+		return formatter.format(time);
+	}
+
+	public static LocalTime stringToLocalTime(String time) {
+		return LocalTime.parse(time);
+	}
+
+	public static String localDateTimeToString(LocalDateTime dateTime, String pattern) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+		return formatter.format(dateTime);
 	}
 
 	public static void main(String[] args) {

@@ -1,5 +1,7 @@
 package com.qinuo.domain;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -13,7 +15,7 @@ import com.qinuo.common.core.domain.BaseEntity;
  * 排班管理对象 qn_scheduling
  * 
  * @author qinuo
- * @date 2022-10-29
+ * @date 2022-11-02
  */
 @Data
 @Accessors(chain = true)
@@ -26,24 +28,23 @@ public class QnScheduling extends BaseEntity
 
     /** 用户ID */
     @Excel(name = "用户ID")
-    private Long accountId;
+    private Long userId;
 
-    /** 医院科室ID */
-    @Excel(name = "医院科室ID")
-    private Long deptId;
+    /** 门诊科目ID */
+    @Excel(name = "门诊科目ID")
+    private Long courseId;
 
     /** 值班日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "值班日期", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date schedulDate;
+    @Excel(name = "值班日期", width = 30)
+    private String schedulDate;
 
-    /** 上午/下午/夜晚 */
-    @Excel(name = "上午/下午/夜晚")
-    private String ampm;
+    /** 门诊开始时间 */
+    @Excel(name = "门诊开始时间", width = 30)
+    private String attendTime;
 
-    /** 时段 */
-    @Excel(name = "时段")
-    private String period;
+    /** 门诊结束时间 */
+    @Excel(name = "门诊结束时间", width = 30)
+    private String finishTime;
 
     /** 门诊类别：临时停诊、普通门诊，专家门诊， 特需门诊 */
     @Excel(name = "门诊类别：临时停诊、普通门诊，专家门诊， 特需门诊")
@@ -55,20 +56,24 @@ public class QnScheduling extends BaseEntity
 
     /** 可预约患者数 */
     @Excel(name = "可预约患者数")
-    private Long ticketCount;
+    private Integer ticketCount;
 
     /** 删除字段 */
     private Boolean isDeleted;
+
+    /** 门诊背景色 */
+    private String backgroundColor;
+
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
-            .append("accountId", getAccountId())
-            .append("deptId", getDeptId())
+            .append("userId", getUserId())
+            .append("courseId", getCourseId())
             .append("schedulDate", getSchedulDate())
-            .append("ampm", getAmpm())
-            .append("period", getPeriod())
+            .append("attendTime", getAttendTime())
+            .append("finishTime", getFinishTime())
             .append("clinicType", getClinicType())
             .append("status", getStatus())
             .append("ticketCount", getTicketCount())
