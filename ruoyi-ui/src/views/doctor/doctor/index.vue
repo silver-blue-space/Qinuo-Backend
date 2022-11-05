@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="用户id" prop="sysUserId">
-        <el-select v-model="queryParams.sysUserId" placeholder="请选择系统用户" @chage="handleQuery" clearable>
+      <el-form-item label="医生" prop="sysUserId">
+        <el-select v-model="queryParams.sysUserId" placeholder="请选择医生" @chage="handleQuery" clearable>
           <el-option
-            v-for="dict in allUserListOptions"
+            v-for="dict in selectDoctorOptions"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
@@ -249,7 +249,7 @@
 </template>
 
 <script>
-import { listDoctor, getDoctor, delDoctor, addDoctor, updateDoctor } from "@/api/doctor/doctor";
+import { listDoctor, getDoctor, delDoctor, addDoctor, updateDoctor,listSelectDoctor } from "@/api/doctor/doctor";
 import {listUser}  from "@/api/system/user";
 
 export default {
@@ -258,6 +258,7 @@ export default {
   data() {
     return {
       allUserListOptions: [],
+      selectDoctorOptions: [],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -307,8 +308,19 @@ export default {
   created() {
     this.getList();
     this.getUserList();
+    this.getDoctorList();
   },
   methods: {
+    // 查询表数据
+    getDoctorList() {
+      this.selectDoctorOptions = [];
+      listSelectDoctor().then(res => {
+        if(res && res.data){}
+        res.data.forEach(p =>{
+          this.selectDoctorOptions.push({ label: (p.nickName + '('  + (p.dept && p.dept.deptName ? p.dept.deptName + '-':'' ) + p.phonenumber + ')'), value: p.userId });
+        })
+      });
+    },
     // 查询表数据
     getUserList() {
       this.allUserListOptions = [];

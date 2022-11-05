@@ -1,425 +1,360 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="用户ID" prop="accountId">
-        <el-input
-          v-model="queryParams.accountId"
-          placeholder="请输入用户ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="医院科室ID" prop="deptId">
-        <el-input
-          v-model="queryParams.deptId"
-          placeholder="请输入医院科室ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="值班日期" prop="schedulDate">
-        <el-date-picker clearable
-          v-model="queryParams.schedulDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择值班日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="早中晚班" prop="ampm">
-        <el-select v-model="queryParams.ampm" placeholder="请选择上午/下午/夜晚" clearable>
-          <el-option
-            v-for="dict in sysAmpmOptions"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="时段" prop="period">
-        <el-date-picker clearable
-          v-model="queryParams.period"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择时段">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="门诊类别" prop="clinicType">
-        <el-select v-model="queryParams.clinicType" placeholder="请选择门诊类别" clearable>
-          <el-option
-            v-for="dict in sysClinicTypeOptions"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="可约人数" prop="ticketCount">
-        <el-input
-          v-model="queryParams.ticketCount"
-          placeholder="请输入可预约患者数"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="Search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <!-- search area -->
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['doctor:scheduling:add']"
-        >新增</el-button>
+    <el-row>
+      <el-col :span="20">
+        <el-form inline>
+          <el-form-item label="门诊科目">
+            <el-select ref="courseSelect" clearable multiple style="width: 250px;" v-model="params.courseIdList" placeholder="请选择门诊科目" @change="search">
+              <el-option v-for="item in selectCourseOptions"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="医生姓名">
+            <el-select ref="doctorSelect" clearable multiple  style="width: 250px;" v-model="params.sysUserIdList" placeholder="请选择医生" @chage="search">
+              <el-option
+                v-for="dict in selectDoctorOptions"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="Edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['doctor:scheduling:edit']"
-        >修改</el-button>
+      <el-col :span="4">
+        <el-button type="primary" size="small" style="float: right" @click="exportCourseSchedulingVisible=true">导出</el-button>
+        <el-button type="primary" size="small" style="float: right; margin-right: 10px;" @click="saveBatchCourseSchedulingVisible=true">排班</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['doctor:scheduling:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['doctor:scheduling:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-
-    <el-table v-loading="loading" :data="schedulingList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" />
-      <el-table-column label="用户ID" align="center" prop="accountId" />
-      <el-table-column label="医院科室ID" align="center" prop="deptId" />
-      <el-table-column label="值班日期" align="center" prop="schedulDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.schedulDate, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="上午/下午/夜晚" align="center" prop="ampm">
-        <template slot-scope="scope">
-          <dict-tag :options="sysAmpmOptions" :value="scope.row.ampm"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="时段" align="center" prop="period" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.period, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="门诊类别" align="center" prop="clinicType">
-        <template slot-scope="scope">
-          <dict-tag :options="sysClinicTypeOptions" :value="scope.row.clinicType"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态，" align="center" prop="status" />
-      <el-table-column label="可预约患者数" align="center" prop="ticketCount" />
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['doctor:scheduling:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['doctor:scheduling:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
-
-    <!-- 添加或修改排班管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户ID" prop="accountId">
-          <el-input v-model="form.accountId" placeholder="请输入用户ID" />
-        </el-form-item>
-        <el-form-item label="医院科室ID" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入医院科室ID" />
-        </el-form-item>
-        <el-form-item label="值班日期" prop="schedulDate">
-          <el-date-picker clearable
-            v-model="form.schedulDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择值班日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="早中晚班" prop="ampm">
-          <el-select v-model="form.ampm" placeholder="请选择上午/下午/夜晚">
-            <el-option
-              v-for="dict in sysAmpmOptions"
-              :key="dict.value"
-              :label="dict.label"
-:value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="时段" prop="period">
-          <el-date-picker clearable
-            v-model="form.period"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择时段">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="门诊类别" prop="clinicType">
-          <el-select v-model="form.clinicType" placeholder="请选择门诊类别：临时停诊、普通门诊，专家门诊， 特需门诊">
-            <el-option
-              v-for="dict in sysClinicTypeOptions"
-              :key="dict.value"
-              :label="dict.label"
-:value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="可预约患者数" prop="ticketCount">
-          <el-input v-model="form.ticketCount" placeholder="请输入可预约患者数" />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
+    <!--Calender area -->
+    <FullCalendar
+      ref="fullCalendarRef"
+      :options="calendarOptions">
+    </FullCalendar>
+    <!--批量排班 area -->
+    <BatchSaveCourseScheduling :visible="saveBatchCourseSchedulingVisible"
+                               @on-close="saveBatchCourseSchedulingVisible=false"
+                               @on-success="saveBatchSuccess"></BatchSaveCourseScheduling>
+    <!--排班详情 area -->
+    <ViewCourseScheduling
+      v-if="doctorOptions && courseOptions"
+      :visible="viewCourseSchedulingVisible"
+      :id="id"
+      :doctors="doctorOptions"
+      :courses="courseOptions"
+      @on-success="updateSuccess"
+      @on-close="viewCourseSchedulingVisible=false">
+    </ViewCourseScheduling>
+    <!--新建排班 area -->
+    <SaveCourseScheduling :visible="saveCourseSchedulingVisible"
+                          :date="currentDate"
+                          :attendTime="currentAttendTime"
+                          @on-close="saveCourseSchedulingVisible=false"
+                          @on-success="saveSuccess">
+    </SaveCourseScheduling>
   </div>
 </template>
 
 <script>
-import { listScheduling, getScheduling, delScheduling, addScheduling, updateScheduling } from "@/api/doctor/scheduling";
-import { getDicts } from '@/api/system/dict/data'
+import FullCalendar from '@fullcalendar/vue'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import listPlugin from '@fullcalendar/list'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import moment from 'moment'
+
+import { listSelectDoctor } from "@/api/doctor/doctor";
+import { listSelectCourse } from "@/api/doctor/course";
+import { listCalendarSchedulingList ,updateScheduling} from "@/api/doctor/scheduling";
+
+import BatchSaveCourseScheduling from '@/views/doctor/scheduling/BatchSaveCourseScheduling'
+import ViewCourseScheduling from '@/views/doctor/scheduling/ViewCourseScheduling'
+import SaveCourseScheduling from '@/views/doctor/scheduling/SaveCourseScheduling'
+
+
 
 export default {
   name: "Scheduling",
+  components: {
+    FullCalendar,
+    BatchSaveCourseScheduling,
+    ViewCourseScheduling,
+    SaveCourseScheduling,
+  },
   data() {
     return {
-      sysClinicTypeOptions: [],
-      sysAmpmOptions: [],
-      // 遮罩层
-      loading: true,
-      // 选中数组
-      ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      // 显示搜索条件
-      showSearch: true,
-      // 总条数
-      total: 0,
-      // 排班管理表格数据
-      schedulingList: [],
-      // 弹出层标题
-      title: "",
-      // 是否显示弹出层
-      open: false,
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        accountId: null,
-        deptId: null,
-        schedulDate: null,
-        ampm: null,
-        period: null,
-        clinicType: null,
-        status: null,
-        ticketCount: null,
+      courseCountObj: {},
+      weekList: [],
+      classroomData: [],
+      courseData: [],
+      teacherData: [],
+      params: {},
+      saveCourseSchedulingVisible: false,
+      viewCourseSchedulingVisible: false,
+      saveBatchCourseSchedulingVisible: false,
+      exportCourseSchedulingVisible: false,
+      id: 0,
+      currentDate: '',
+      currentAttendTime: '',
+      calendarOptions: {
+        plugins: [dayGridPlugin, listPlugin, timeGridPlugin, interactionPlugin],
+        initialView: 'timeGridWeek',
+        locale: 'zh',
+        // 每周开始是周几，Sunday=0, Monday=1
+        firstDay: '1',
+        // 时间轴间距
+        slotMinTime: '07:00',
+        slotMaxTime: '21:00',
+        slotDuration: '00:15:00',
+        // 是否显示第几周
+        weekNumbers: true,
+        weekText: '周',
+        // 是否显示当前时间标记
+        nowIndicator: true,
+        // 是否显示全天插槽
+        allDaySlot: false,
+        // 日期否可点击
+        navLinks: true,
+        // 月视图，是否为指定周数高度，true 6周高度
+        fixedWeekCount: false,
+        // 月视图，是否显示非本月日期
+        showNonCurrentDates: false,
+        // 月视图，限制每天显示最大事件数，不包括+more链接，false 全部显示，true 限制为日单元格的高度，number 限制为指定行数高度
+        dayMaxEvents: true,
+        // 与dayMaxEvents类似，区别为包括+more链接
+        // dayMaxEventRows: true,
+        // 是否可拖拽
+        editable: true,
+        events: [],
+        headerToolbar: {
+          start: 'prev,next today',
+          center: 'title',
+          end: 'timeGridWeek,dayGridMonth'
+        },
+        buttonText: {
+          today: '今天',
+          month: '月',
+          week: '周',
+          day: '日',
+          list: '周列表'
+        },
+        slotLabelFormat: {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: false
+        },
+        eventTimeFormat: {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: false
+        },
+        datesSet: this.datesSet,
+        dayHeaderContent: this.dayHeaderContent,
+        eventClick: this.handleEventClick,
+        dateClick: this.handleDateClick,
+        // 当事件拖动时触发
+        eventDragStart: this.eventDragStart,
+        // 当事件拖动停止时触发
+        eventDragStop: this.eventDragStop,
+        // 当拖动停止并且事件移动到不同的日子/时间时触发
+        eventDrop: this.eventDrop,
+        // 当外部可拖动元素或来自另一个日历的事件被拖放到该日历中时调用
+        drop: this.drop,
+        // 当带有关联事件数据的外部可拖动元素拖放到日历中时调用，或来自另一个日历的事件
+        eventReceive: this.eventReceive,
+        // 当一个日历上的事件即将拖放到另一个日历上时触发
+        eventLeave: this.eventLeave,
+        // 开始缩放时触发
+        eventResizeStart: this.eventResizeStart,
+        // 停止缩放时触发
+        eventResizeStop: this.eventResizeStop,
+        // 当缩放停止且事件持续时间发生更改时触发
+        eventResize: this.eventResize
       },
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
-        accountId: [
-          { required: true, message: "用户ID不能为空", trigger: "blur" }
-        ],
-        deptId: [
-          { required: true, message: "医院科室ID不能为空", trigger: "blur" }
-        ],
-        schedulDate: [
-          { required: true, message: "值班日期不能为空", trigger: "blur" }
-        ],
-        ampm: [
-          { required: true, message: "上午/下午/夜晚不能为空", trigger: "change" }
-        ],
-        period: [
-          { required: true, message: "时段不能为空", trigger: "blur" }
-        ],
-        clinicType: [
-          { required: true, message: "门诊类别：临时停诊、普通门诊，专家门诊， 特需门诊不能为空", trigger: "change" }
-        ],
-        status: [
-          { required: true, message: "状态，不能为空", trigger: "blur" }
-        ],
-        ticketCount: [
-          { required: true, message: "可预约患者数不能为空", trigger: "blur" }
-        ],
-      }
+      //
+      selectDoctorOptions: [],
+      doctorOptions: {},
+      selectCourseOptions: [],
+      courseOptions: {},
+
     };
   },
-  created() {
-    this.getList();
-    this.sysAmpmOptions = [];
-    this.sysClinicTypeOptions = [];
-    getDicts("sys_clinic_type").then(response => {
-      response.data.forEach(p =>{
-        this.sysClinicTypeOptions.push({ label: p.dictLabel, value: p.dictValue, elTagType: p.listClass, elTagClass: p.cssClass });
-      })
-    });
-    getDicts("sys_ampm").then(response => {
-      response.data.forEach(p =>{
-        this.sysAmpmOptions.push({ label: p.dictLabel, value: p.dictValue, elTagType: p.listClass, elTagClass: p.cssClass });
-      })
-    });
+   created() {
+
+  },
+  computed: {
+  },
+  async mounted () {
+   // 查询医生列表数据
+   await this.getDoctorList();
+   // 查询门诊科目列表(下拉列表)
+   await this.getCourseList();
+    // 查询排班日历数据
+    this.search();
   },
   methods: {
-    /** 查询排班管理列表 */
-    getList() {
-      this.loading = true;
-      listScheduling(this.queryParams).then(response => {
-        this.schedulingList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+    /** 批量排班更新成功排班列表 */
+    saveBatchSuccess(){
+      this.search()
+      this.saveBatchCourseSchedulingVisible = false
     },
-    // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-    },
-    // 表单重置
-    reset() {
-      this.form = {
-        id: null,
-        accountId: null,
-        deptId: null,
-        schedulDate: null,
-        ampm: null,
-        period: null,
-        clinicType: null,
-        status: "0",
-        ticketCount: null,
-        createBy: null,
-        createTime: null,
-        updateBy: null,
-        updateTime: null,
-        remark: null,
-        isDeleted: null
-      };
-      this.resetForm("form");
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
-    },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
-    },
-    /** 新增按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加排班管理";
-    },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const id = row.id || this.ids
-      getScheduling(id).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改排班管理";
-      });
-    },
-    /** 提交按钮 */
-    submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.id != null) {
-            updateScheduling(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addScheduling(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
+    /** 查询排班列表 */
+    search(){
+      if(!this.$refs.fullCalendarRef){
+        return;
+      }
+      this.params.startDate = moment(this.$refs.fullCalendarRef.getApi().view.currentStart).format('YYYY-MM-DD');
+      this.params.endDate = moment(this.$refs.fullCalendarRef.getApi().view.currentEnd).endOf('month').format('YYYY-MM-DD');
+      listCalendarSchedulingList(this.params).then(res => {
+        if (res && res.data) {
+          this.calendarOptions.events = [];
+          this.courseCountObj = res.scheduleCount || {};
+          res.data.forEach(item => {
+            this.calendarOptions.events.push({
+              id: item.id,
+              title: this.courseOptions[item.courseId] + ' '  + this.doctorOptions[item.userId],
+              start: item.schedulDate + ' ' + item.attendTime,
+              end: item.schedulDate + ' ' + item.finishTime,
+              extendedProps: item,
+              backgroundColor: item.backgroundColor,
+            })
+          })
         }
-      });
+      }).catch(() => {
+      })
     },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除排班管理编号为"' + ids + '"的数据项？').then(function() {
-        return delScheduling(ids);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+    /** 查询医生列表(下拉列表) */
+    async getDoctorList() {
+      this.selectDoctorOptions = [];
+      let res =  await listSelectDoctor();
+      if(res && res.data){
+        res.data.forEach(p =>{
+          this.doctorOptions[p.userId] = p.nickName;
+          this.selectDoctorOptions.push({ label: (p.nickName + '('  + (p.dept && p.dept.deptName ? p.dept.deptName + '-':'' ) + p.phonenumber + ')'), value: p.userId });
+        });
+      }
     },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('doctor/scheduling/export', {
-        ...this.queryParams
-      }, `scheduling_${new Date().getTime()}.xlsx`)
-    }
+    /** 查询门诊科目列表(下拉列表) */
+    async getCourseList() {
+      this.selectCourseOptions = [];
+      let res = await listSelectCourse();
+      if(res && res.data){
+        res.data.forEach(p =>{
+          this.courseOptions[p.id] = p.name;
+          this.selectCourseOptions.push({ label: p.name , value: p.id });
+        });
+      }
+    },
+    ////////
+    updateSuccess () {
+      this.search()
+      this.viewCourseSchedulingVisible = false
+    },
+    datesSet (info) {
+      console.info("info",this.info);
+      // this.search()
+    },
+    saveSuccess () {
+      this.search()
+      this.saveCourseSchedulingVisible = false
+    },
+    dayHeaderContent (info) {
+      if (info.view.type === 'dayGridMonth') {
+        return { html: `<div class="fc-scrollgrid-sync-inner"><a class="fc-col-header-cell-cushion">${info.text}</a></div>` }
+      } else if (info.view.type === 'timeGridWeek') {
+        return {
+          html: `<div class="fc-scrollgrid-sync-inner">
+                    <a class="fc-col-header-cell-cushion"
+                        data-navlink="{&quot;date&quot;:&quot;${moment(info.date).format('YYYY-MM-DD')}&quot;,&quot;type&quot;:&quot;day&quot;}" tabindex="0">${info.text}</a>
+                    <span id="tams-course-count-${moment(info.date).format('YYYY-MM-DD')}" style="cursor: default;">${this.getCourseCount(info.date)}</span>预约
+                </div>`
+        }
+      } else if (info.view.type === 'dayGridDay') {
+        return {
+          html: `<div class="fc-scrollgrid-sync-inner">
+                     <a class="fc-col-header-cell-cushion">${info.text}</a>
+                     <span id="tams-course-count-${moment(info.date).format('YYYY-MM-DD')}" style="cursor: default;">${this.getCourseCount(info.date)}</span>预约
+                 </div>`
+        }
+      } else if (info.view.type === 'listWeek') {
+        return {
+          html: `<a class="fc-list-day-text"
+                      data-navlink="${info.navLinkData.replace(/"/g, '&quot;')}" tabindex="0">${info.text}</a>
+                 <a class="fc-list-day-side-text"
+                      data-navlink="${info.navLinkData.replace(/"/g, '&quot;')}" tabindex="0">${info.sideText}</a>`
+        }
+      }
+      return 'unknown view type'
+    },
+    getCourseCount (date) {
+      const count = this.courseCountObj[moment(date).format('YYYY-MM-DD')]
+      return count || 0
+    },
+    /** 查看詳情 */
+    handleEventClick (info) {
+      this.id = info.event.id
+      this.viewCourseSchedulingVisible = true
+    },
+    handleDateClick (info) {
+      this.currentDate = moment(info.date).format('YYYY-MM-DD')
+      const infoDate = moment(info.date)
+      if (infoDate.hour() > 0) {
+        this.currentAttendTime = infoDate.format('HH:mm')
+      }
+      this.saveCourseSchedulingVisible = true
+    },
+    eventDragStart (info) {
+      console.log('eventDragStart', info)
+    },
+    eventDragStop (info) {
+      console.log('eventDragStop', info)
+    },
+    eventDrop (info) {
+      //拖拽
+      updateScheduling({
+        id: info.event.id,
+        schedulDate: moment(info.event.start).format('YYYY-MM-DD'),
+        attendTime: moment(info.event.start).format('HH:mm:ss'),
+        finishTime: moment(info.event.end).format('HH:mm:ss')
+      }).then(res => {
+        this.search()
+      }).catch(() => {
+        this.search()
+      })
+    },
+    drop (info) {
+      console.log('drop', info)
+    },
+    eventReceive (info) {
+      console.log('eventReceive', info)
+    },
+    eventLeave (info) {
+      console.log('eventLeave', info)
+    },
+    eventResizeStart (info) {
+      console.log('eventResizeStart', info)
+    },
+    eventResizeStop (info) {
+      console.log('eventResizeStop', info)
+    },
+    eventResize (info) {
+      //拖拽
+      updateScheduling({
+        id: info.event.id,
+        schedulDate: moment(info.event.start).format('YYYY-MM-DD'),
+        attendTime: moment(info.event.start).format('HH:mm:ss'),
+        finishTime: moment(info.event.end).format('HH:mm:ss')
+      }).then(res => {
+        this.search()
+      }).catch(() => {
+        this.search()
+      })
+    },
   }
 };
 </script>

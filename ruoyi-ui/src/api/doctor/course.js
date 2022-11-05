@@ -9,6 +9,13 @@ export function listCourse(query) {
   })
 }
 
+// 查询门诊科目列表(下拉列表)
+export function listSelectCourse() {
+  return request({
+    url: '/doctor/course/selections',
+    method: 'get'
+  })
+}
 // 查询门诊科目详细
 export function getCourse(id) {
   return request({

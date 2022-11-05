@@ -42,3 +42,19 @@ export function delScheduling(id) {
     method: 'delete'
   })
 }
+// 批量排班管理
+export function batchSaveCourseScheduling(data){
+  return request({
+    url: '/doctor/scheduling/batch',
+    method: 'post',
+    data: data
+  })
+}
+// 查询排班日历管理列表
+export function listCalendarSchedulingList(data) {
+  return request({
+    url: '/doctor/scheduling/calendar/list',
+    method: 'get',
+    params: data
+  })
+}
