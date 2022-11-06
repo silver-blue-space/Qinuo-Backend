@@ -2,7 +2,7 @@
   "name": "qinuo",
   "version": "3.8.4",
   "description": "奇诺管理系统",
-  "author": "若依",
+  "author": "奇诺",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",

@@ -22,10 +22,10 @@
             <el-form-item label="医生姓名" prop="userId" clearable>
               <el-select v-model="form.userId" class="tams-form-item"  placeholder="请选择排班医生">
                 <el-option
-                  v-for="dict in selectDoctorOptions"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
+                  v-for="item in selectDoctorOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
                 ></el-option>
               </el-select>
             </el-form-item>

@@ -4,10 +4,10 @@
       <el-form-item label="医生" prop="sysUserId">
         <el-select v-model="queryParams.sysUserId" placeholder="请选择医生" @chage="handleQuery" clearable>
           <el-option
-            v-for="dict in selectDoctorOptions"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
+            v-for="item in selectDoctorOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
           ></el-option>
         </el-select>
       </el-form-item>

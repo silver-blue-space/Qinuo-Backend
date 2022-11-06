@@ -1,12 +1,11 @@
 <template>
   <div class="app-container">
     <!-- search area -->
-
     <el-row>
       <el-col :span="20">
         <el-form inline>
-          <el-form-item label="门诊科目">
-            <el-select ref="courseSelect" clearable multiple style="width: 250px;" v-model="params.courseIdList" placeholder="请选择门诊科目" @change="search">
+          <el-form-item label="门诊科目" prop="courseId">
+            <el-select ref="courseSelect" clearable  style="width: 250px;" v-model="params.courseId" placeholder="请选择门诊科目" @change="search">
               <el-option v-for="item in selectCourseOptions"
                          :key="item.value"
                          :label="item.label"
@@ -14,13 +13,13 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="医生姓名">
-            <el-select ref="doctorSelect" clearable multiple  style="width: 250px;" v-model="params.sysUserIdList" placeholder="请选择医生" @chage="search">
+          <el-form-item label="医生姓名" prop="userId">
+            <el-select ref="doctorSelect" clearable style="width: 250px;" v-model="params.userId" placeholder="请选择医生" @change="search">
               <el-option
-                v-for="dict in selectDoctorOptions"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
+                v-for="item in selectDoctorOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -208,9 +207,9 @@ export default {
       if(!this.$refs.fullCalendarRef){
         return;
       }
-      this.params.startDate = moment(this.$refs.fullCalendarRef.getApi().view.currentStart).format('YYYY-MM-DD');
-      this.params.endDate = moment(this.$refs.fullCalendarRef.getApi().view.currentEnd).endOf('month').format('YYYY-MM-DD');
-      listCalendarSchedulingList(this.params).then(res => {
+      let startDate = moment(this.$refs.fullCalendarRef.getApi().view.currentStart).format('YYYY-MM-DD');
+      let endDate = moment(this.$refs.fullCalendarRef.getApi().view.currentEnd).endOf('month').format('YYYY-MM-DD');
+      listCalendarSchedulingList(this.addDateRange(this.params, [startDate,endDate])).then(res => {
         if (res && res.data) {
           this.calendarOptions.events = [];
           this.courseCountObj = res.scheduleCount || {};

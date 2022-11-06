@@ -35,10 +35,10 @@
       <el-form-item label="医生姓名" prop="userId">
         <el-select v-model="form.userId" class="tams-form-item">
           <el-option
-            v-for="dict in selectDoctorOptions"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
+            v-for="item in selectDoctorOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
           ></el-option>
         </el-select>
       </el-form-item>
