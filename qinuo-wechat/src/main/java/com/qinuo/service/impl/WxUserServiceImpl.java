@@ -10,7 +10,7 @@ import com.qinuo.constant.ConfigConstant;
 import com.qinuo.constant.WxMaConstants;
 import com.qinuo.dao.intf.WxUserDao;
 import com.qinuo.entity.ThirdSession;
-import com.qinuo.entity.WxOpenDataDTO;
+import com.qinuo.domain.WxOpenDataDTO;
 import com.qinuo.entity.WxUserEntity;
 import com.qinuo.service.WxUserService;
 import com.qinuo.common.utils.StringUtils;

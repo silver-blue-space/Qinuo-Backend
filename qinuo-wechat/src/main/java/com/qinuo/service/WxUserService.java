@@ -1,7 +1,7 @@
 package com.qinuo.service;
 
 
-import com.qinuo.entity.WxOpenDataDTO;
+import com.qinuo.domain.WxOpenDataDTO;
 import com.qinuo.entity.WxUserEntity;
 import me.chanjar.weixin.common.error.WxErrorException;
 

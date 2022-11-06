@@ -5,8 +5,8 @@
 package com.qinuo.api;
 
 import com.qinuo.common.core.domain.AjaxResult;
-import com.qinuo.entity.LoginMaDTO;
-import com.qinuo.entity.WxOpenDataDTO;
+import com.qinuo.domain.LoginMaDTO;
+import com.qinuo.domain.WxOpenDataDTO;
 import com.qinuo.entity.WxUserEntity;
 import com.qinuo.service.WxUserService;
 import com.qinuo.utils.ThirdSessionHolder;

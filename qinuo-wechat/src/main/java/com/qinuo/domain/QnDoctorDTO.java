@@ -1,4 +1,4 @@
-package com.qinuo.entity;
+package com.qinuo.domain;
 
 
 import com.qinuo.domain.QnDoctor;

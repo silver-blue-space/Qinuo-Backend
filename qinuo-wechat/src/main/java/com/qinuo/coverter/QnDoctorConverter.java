@@ -2,7 +2,7 @@ package com.qinuo.coverter;
 
 import com.qinuo.common.core.domain.entity.SysUser;
 import com.qinuo.domain.QnDoctor;
-import com.qinuo.entity.QnDoctorDTO;
+import com.qinuo.domain.QnDoctorDTO;
 import com.qinuo.entity.QnDoctorEntity;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;

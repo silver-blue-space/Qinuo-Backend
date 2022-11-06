@@ -70,7 +70,6 @@ import moment from 'moment'
 import { listSelectDoctor } from "@/api/doctor/doctor";
 import { listSelectCourse } from "@/api/doctor/course";
 import { listCalendarSchedulingList ,updateScheduling} from "@/api/doctor/scheduling";
-
 import BatchSaveCourseScheduling from '@/views/doctor/scheduling/BatchSaveCourseScheduling'
 import ViewCourseScheduling from '@/views/doctor/scheduling/ViewCourseScheduling'
 import SaveCourseScheduling from '@/views/doctor/scheduling/SaveCourseScheduling'
@@ -255,8 +254,7 @@ export default {
       this.viewCourseSchedulingVisible = false
     },
     datesSet (info) {
-      console.info("info",this.info);
-      // this.search()
+      this.search()
     },
     saveSuccess () {
       this.search()

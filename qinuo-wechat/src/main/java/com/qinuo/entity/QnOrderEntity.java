@@ -74,12 +74,6 @@ public class QnOrderEntity extends RichEntity {
   private String isPay;
 
   @TableField(
-      value = "name",
-      desc = "订单名"
-  )
-  private String name;
-
-  @TableField(
       value = "order_no",
       desc = "订单单号"
   )
@@ -122,6 +116,12 @@ public class QnOrderEntity extends RichEntity {
   private BigDecimal salesPrice;
 
   @TableField(
+      value = "scheduling_id",
+      desc = "订单名"
+  )
+  private Long schedulingId;
+
+  @TableField(
       value = "status",
       desc = "订单状态1、待发货 2、待收货 3、确认收货/已完成 5、已关闭"
   )
@@ -147,7 +147,7 @@ public class QnOrderEntity extends RichEntity {
 
   @TableField(
       value = "wx_user_id",
-      desc = "用户id"
+      desc = "微信id"
   )
   private String wxUserId;
 
