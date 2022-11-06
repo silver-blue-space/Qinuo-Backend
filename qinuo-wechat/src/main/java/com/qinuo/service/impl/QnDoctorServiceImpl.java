@@ -5,22 +5,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.google.gson.JsonObject;
-import com.qinuo.common.constant.HttpStatus;
-import com.qinuo.common.core.page.PageDomain;
-import com.qinuo.common.core.page.TableDataInfo;
-import com.qinuo.common.core.page.TableSupport;
-import com.qinuo.common.utils.PageUtils;
+
 import com.qinuo.common.utils.SecurityUtils;
-import com.qinuo.common.utils.sql.SqlUtil;
 import com.qinuo.coverter.QnDoctorConverter;
 import com.qinuo.dao.intf.QnDoctorDao;
 import com.qinuo.domain.QnDoctor;
 import com.qinuo.entity.QnDoctorEntity;
 import com.qinuo.service.IQnDoctorService;
+import com.qinuo.system.service.ISysUserService;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +29,10 @@ public class QnDoctorServiceImpl implements IQnDoctorService
 {
     @Autowired
     private QnDoctorDao qnDoctorDao;
+    @Autowired
+    private IQnDoctorService qnDoctorService;
+    @Autowired
+    private ISysUserService userService;
 
     /**
      * 查询医生管理

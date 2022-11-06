@@ -1,6 +1,5 @@
 package com.qinuo.service;
 
-import com.qinuo.common.core.page.TableDataInfo;
 import com.qinuo.domain.QnDoctor;
 
 import java.util.List;

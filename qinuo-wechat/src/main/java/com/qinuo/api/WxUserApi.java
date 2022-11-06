@@ -11,6 +11,8 @@ import com.qinuo.entity.WxUserEntity;
 import com.qinuo.service.WxUserService;
 import com.qinuo.utils.ThirdSessionHolder;
 import com.qinuo.utils.WxMaUtil;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,9 @@ public class WxUserApi {
 	 * @param loginMaDTO
 	 * @return
 	 */
+	@ApiOperation("小程序用户登录")
 	@PostMapping("/login")
+	@ApiImplicitParam(name = "loginMaDTO", value = "用户登录", required = true, dataTypeClass = LoginMaDTO.class)
 	public AjaxResult login(HttpServletRequest request, @RequestBody LoginMaDTO loginMaDTO){
 		try {
 			WxUserEntity wxUser = wxUserService.loginMa(WxMaUtil.getAppId(request),loginMaDTO.getJsCode());
@@ -52,6 +56,7 @@ public class WxUserApi {
 	 * @param
 	 * @return
 	 */
+	@ApiOperation("获取用户信息")
 	@GetMapping
 	public AjaxResult get(){
 		String id = ThirdSessionHolder.getThirdSession().getWxUserId();
@@ -63,6 +68,7 @@ public class WxUserApi {
 	 * @param wxOpenDataDTO
 	 * @return
 	 */
+	@ApiOperation("保存用户信息")
 	@PostMapping
 	public AjaxResult saveOrUptateWxUser(@RequestBody WxOpenDataDTO wxOpenDataDTO){
 		wxOpenDataDTO.setAppId(ThirdSessionHolder.getThirdSession().getAppId());

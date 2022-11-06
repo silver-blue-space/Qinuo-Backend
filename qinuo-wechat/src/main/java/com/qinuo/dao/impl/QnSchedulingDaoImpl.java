@@ -1,14 +1,21 @@
 package com.qinuo.dao.impl;
 
 import cn.org.atool.fluent.mybatis.If;
+import cn.org.atool.fluent.mybatis.base.crud.BaseQuery;
+import cn.org.atool.fluent.mybatis.base.crud.IQuery;
+import cn.org.atool.fluent.mybatis.base.model.SqlOp;
+import com.qinuo.common.utils.DateUtils;
+import com.qinuo.common.utils.StringUtils;
 import com.qinuo.dao.base.QnSchedulingBaseDao;
 import com.qinuo.dao.intf.QnSchedulingDao;
 import com.qinuo.domain.QnScheduling;
 import com.qinuo.entity.QnSchedulingEntity;
+import com.qinuo.wrapper.QnSchedulingQuery;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
+import java.util.function.BiPredicate;
 
 /**
  * QnSchedulingDaoImpl: 数据操作接口实现
@@ -29,19 +36,7 @@ public class QnSchedulingDaoImpl extends QnSchedulingBaseDao implements QnSchedu
      */
     @Override
     public List<QnSchedulingEntity> selectQnSchedulingList(QnScheduling param, Integer pageNum, Integer pageSize) {
-        return this.query()
-                .where.isDeleted().isFalse()
-                .and.userId().eq(param.getUserId(), If::notNull)
-                .and.courseId().eq(param.getCourseId(), If::notNull)
-                .and.schedulDate().eq(param.getSchedulDate(), If::notNull)
-                .and.clinicType().eq(param.getClinicType(),If::notBlank)
-                .and.attendTime().eq(param.getAttendTime(),If::notNull)
-                .and.finishTime().eq(param.getFinishTime(),If::notNull)
-                .and.status().eq(param.getStatus(),If::notBlank)
-                .and.ticketCount().eq(param.getTicketCount(),If::notNull)
-                .end()
-                .limit(pageNum,pageSize)
-                .execute(this::listEntity);
+        return mapper.listEntity(getQnSchedulingQuery(param).limit(pageNum,pageSize));
     }
 
     /**
@@ -51,18 +46,7 @@ public class QnSchedulingDaoImpl extends QnSchedulingBaseDao implements QnSchedu
      */
     @Override
     public int countQnSchedulingList(QnScheduling param) {
-        return this.query()
-                .where.isDeleted().isFalse()
-                .and.userId().eq(param.getUserId(), If::notNull)
-                .and.courseId().eq(param.getCourseId(), If::notNull)
-                .and.schedulDate().eq(param.getSchedulDate(), If::notNull)
-                .and.clinicType().eq(param.getClinicType(),If::notBlank)
-                .and.attendTime().eq(param.getAttendTime(),If::notNull)
-                .and.finishTime().eq(param.getFinishTime(),If::notNull)
-                .and.status().eq(param.getStatus(),If::notBlank)
-                .and.ticketCount().eq(param.getTicketCount(),If::notNull)
-                .end()
-                .execute(this::count);
+        return mapper.count(getQnSchedulingQuery(param));
     }
 
     /**
@@ -72,7 +56,16 @@ public class QnSchedulingDaoImpl extends QnSchedulingBaseDao implements QnSchedu
      */
     @Override
     public List<QnSchedulingEntity> selectQnSchedulingList(QnScheduling param) {
-        return this.query()
+        return mapper.listEntity(getQnSchedulingQuery(param));
+    }
+
+    /**
+     * QnScheduling 构造查询Query
+     * 设置 开始时间~结束时间Where 条件
+     * @param param 查询条件
+     */
+    private QnSchedulingQuery getQnSchedulingQuery(QnScheduling param) {
+        QnSchedulingQuery schedulingQuery = this.query()
                 .where.isDeleted().isFalse()
                 .and.id().eq(param.getId(), If::notNull)
                 .and.userId().eq(param.getUserId(), If::notNull)
@@ -83,10 +76,16 @@ public class QnSchedulingDaoImpl extends QnSchedulingBaseDao implements QnSchedu
                 .and.finishTime().eq(param.getFinishTime(),If::notNull)
                 .and.status().eq(param.getStatus(),If::notBlank)
                 .and.ticketCount().eq(param.getTicketCount(),If::notNull)
-                .end()
-                .execute(this::listEntity);
+                .end();
+        if(Objects.nonNull(param.getParams()) &&
+                param.getParams().containsKey("beginTime") &&
+                param.getParams().containsKey("endTime") &&
+                Objects.nonNull(param.getParams().get("beginTime")) &&
+                Objects.nonNull(param.getParams().get("endTime"))){
+            schedulingQuery.where().apply("schedul_date", SqlOp.BETWEEN, param.getParams().get("beginTime"),param.getParams().get("endTime"));
+        }
+        return schedulingQuery;
     }
-
     @Override
     public List<QnSchedulingEntity> selectCourseSchedulingList(Long userId, List<LocalDate> dateList) {
         return this.query()
