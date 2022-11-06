@@ -1,19 +1,14 @@
 package generator;
 
-import cn.hutool.json.JSONObject;
 import cn.org.atool.generator.FileGenerator;
 import cn.org.atool.generator.annotation.Column;
 import cn.org.atool.generator.annotation.Table;
 import cn.org.atool.generator.annotation.Tables;
-import com.qinuo.common.typehandler.ArrayLongTypeHandler;
-import com.qinuo.common.typehandler.JsonTypeHandler;
-import org.apache.ibatis.type.JdbcType;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.test4j.module.database.proxy.DataSourceCreator;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class FluentMyBatisGeneratorMain {
@@ -46,11 +41,12 @@ public class FluentMyBatisGeneratorMain {
             /* 需要生成文件的表 ( 表名称:对应的Entity名称 ) **/
             tables ={
                     @Table(value = "wx_user", columns = @Column(value = "tagid_list", javaType = String.class)),
+                    @Table(value = "qn_order"),
                     @Table(value = "qn_scheduling", columns = {@Column(value = {"attend_time","finish_time"}, javaType = LocalTime.class),@Column(value = {"schedul_date"}, javaType = LocalDate.class)}),
                     @Table(
-                    value = {
-                            "qn_course","qn_course","qn_doctor"
-                    }),
+                            value = {
+                                    "qn_course","qn_course","qn_doctor"
+                            }),
             }
     )
     static class Abc {

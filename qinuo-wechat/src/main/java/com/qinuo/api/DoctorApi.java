@@ -1,9 +1,12 @@
 package com.qinuo.api;
 
 
+import cn.hutool.core.util.NumberUtil;
+import com.google.common.collect.Maps;
 import com.qinuo.common.annotation.Anonymous;
 import com.qinuo.common.core.domain.AjaxResult;
 import com.qinuo.common.core.domain.entity.SysUser;
+import com.qinuo.common.utils.StringUtils;
 import com.qinuo.coverter.QnDoctorConverter;
 import com.qinuo.domain.QnCourse;
 import com.qinuo.domain.QnDoctor;
@@ -81,9 +84,29 @@ public class DoctorApi {
     @ApiOperation("获取门诊医生排班日历")
     @GetMapping("/scheduling")
     @ApiImplicitParams({@ApiImplicitParam(name = "startDate", value = "开始时间", required = true, dataType = "String", paramType = "path", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "endDate", value = "结束时间", required = true, dataType = "String", paramType = "path", dataTypeClass = String.class)})
-    public AjaxResult scheduling(String startDate,String endDate){
-        List<QnScheduling> list =  qnSchedulingService.selectQnSchedulingList(new QnScheduling().setId(0L));
+            @ApiImplicitParam(name = "endDate", value = "结束时间", required = true, dataType = "String", paramType = "path", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "courseId", value = "门诊科目ID", required = true, dataType = "String", paramType = "path", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "doctorId", value = "医生ID", required = true, dataType = "String", paramType = "path", dataTypeClass = String.class)})
+    public AjaxResult scheduling(String startDate,String endDate,String courseId,String doctorId){
+
+        QnScheduling qnScheduling =  new QnScheduling();
+        if(!StringUtils.isEmpty(startDate) && !StringUtils.isEmpty(endDate)){
+            Map<String, Object> params = Maps.newHashMap();
+            params.put("beginTime",startDate);
+            params.put("endTime",endDate);
+            qnScheduling.setParams(params);
+        }else {
+            AjaxResult.error("门诊排班开始~结束时间不能为空！");
+        }
+
+        if(StringUtils.isEmpty(courseId) && NumberUtil.isLong(courseId)){
+            qnScheduling.setCourseId(NumberUtil.parseLong(courseId));
+        }
+        if(StringUtils.isEmpty(doctorId) && NumberUtil.isLong(doctorId)){
+            qnScheduling.setUserId(NumberUtil.parseLong(doctorId));
+        }
+
+        List<QnScheduling> list =  qnSchedulingService.selectQnSchedulingList(qnScheduling);
         Map<String,Long> scheduleCount = list.stream().collect(Collectors.groupingBy(QnScheduling::getSchedulDate, Collectors.counting()));
         //TODO：去除已经预约件数.
         return AjaxResult.success(list).put("scheduleCount",scheduleCount);
