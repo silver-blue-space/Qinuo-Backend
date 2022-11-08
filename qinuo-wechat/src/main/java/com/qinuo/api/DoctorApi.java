@@ -85,8 +85,8 @@ public class DoctorApi {
     @GetMapping("/scheduling")
     @ApiImplicitParams({@ApiImplicitParam(name = "startDate", value = "开始时间", required = true, dataType = "String", paramType = "path", dataTypeClass = String.class),
             @ApiImplicitParam(name = "endDate", value = "结束时间", required = true, dataType = "String", paramType = "path", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "courseId", value = "门诊科目ID", required = true, dataType = "String", paramType = "path", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "doctorId", value = "医生ID", required = true, dataType = "String", paramType = "path", dataTypeClass = String.class)})
+            @ApiImplicitParam(name = "courseId", value = "门诊科目ID", dataType = "String", paramType = "path", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "doctorId", value = "医生ID", dataType = "String", paramType = "path", dataTypeClass = String.class)})
     public AjaxResult scheduling(String startDate,String endDate,String courseId,String doctorId){
 
         QnScheduling qnScheduling =  new QnScheduling();
