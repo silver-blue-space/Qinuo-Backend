@@ -50,6 +50,12 @@ public class QnOrderEntity extends RichEntity {
   private Date closingTime;
 
   @TableField(
+      value = "course_id",
+      desc = "门诊科目ID"
+  )
+  private Long courseId;
+
+  @TableField(
       value = "create_by",
       desc = "创建者"
   )
@@ -116,8 +122,14 @@ public class QnOrderEntity extends RichEntity {
   private BigDecimal salesPrice;
 
   @TableField(
+      value = "schedul_date",
+      desc = "门诊时间"
+  )
+  private Date schedulDate;
+
+  @TableField(
       value = "scheduling_id",
-      desc = "订单名"
+      desc = "门诊ID"
   )
   private Long schedulingId;
 

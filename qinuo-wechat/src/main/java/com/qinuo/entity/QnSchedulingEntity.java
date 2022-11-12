@@ -7,6 +7,7 @@ import cn.org.atool.fluent.mybatis.annotation.LogicDelete;
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
@@ -79,6 +80,12 @@ public class QnSchedulingEntity extends RichEntity {
       desc = "备注"
   )
   private String remark;
+
+  @TableField(
+      value = "sales_price",
+      desc = "销售价格"
+  )
+  private BigDecimal salesPrice;
 
   @TableField(
       value = "schedul_date",

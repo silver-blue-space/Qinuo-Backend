@@ -1,8 +1,11 @@
 package com.qinuo.domain;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
+
+import cn.org.atool.fluent.mybatis.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -64,6 +67,9 @@ public class QnScheduling extends BaseEntity
     /** 门诊背景色 */
     private String backgroundColor;
 
+    /** 销售价格 */
+    @Excel(name = "销售价格")
+    private BigDecimal salesPrice;
 
     @Override
     public String toString() {
@@ -76,6 +82,7 @@ public class QnScheduling extends BaseEntity
             .append("finishTime", getFinishTime())
             .append("clinicType", getClinicType())
             .append("status", getStatus())
+            .append("salesPrice", getSalesPrice())
             .append("ticketCount", getTicketCount())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

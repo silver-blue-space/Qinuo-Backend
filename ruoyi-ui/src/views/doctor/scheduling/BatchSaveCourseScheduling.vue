@@ -33,6 +33,32 @@
         </el-row>
         <el-row>
           <el-col :span="12">
+            <el-form-item label="门诊状态" prop="status">
+              <el-select v-model="form.status" placeholder="请选择门诊状态" clearable>
+                <el-option
+                  v-for="dict in dict.type.sys_scheduling_status"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="售价(元)" prop="salesPrice">
+              <el-input-number
+                v-model="form.salesPrice"
+                placeholder="对外售价"
+                :min="1"
+                :max="888888"
+                :precision="2"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
             <el-form-item label="排班日期" prop="dates" >
               <el-date-picker
                 :clearable="false"
@@ -106,6 +132,7 @@ import { batchSaveCourseScheduling} from "@/api/doctor/scheduling";
 
 export default {
   name: 'BatchSaveCourseScheduling',
+  dicts: ['sys_scheduling_status'],
   props: {
     visible: {
       type: Boolean
@@ -184,6 +211,20 @@ export default {
             message: '门诊结束时间不能为空',
             trigger: 'blur'
           }
+        ],
+        status: [
+          {
+            required: true,
+            message: '门诊状态不能为空',
+            trigger: 'blur'
+          }
+        ],
+        salesPrice: [
+          {
+            required: true,
+            message: '对外售价不能为空',
+            trigger: 'blur'
+          }
         ]
       },
       submitBtnLoading: false
@@ -194,18 +235,20 @@ export default {
       this.weekList = [1, 2, 3, 4, 5]
       this.selectCourseOptions = [];
       listSelectCourse().then(res => {
-        if(res && res.data){}
-        res.data.forEach(p =>{
-          this.selectCourseOptions.push({ label: p.name , value: p.id, duration:p.duration });
-        })
+        if(res && res.data){
+          res.data.forEach(p =>{
+            this.selectCourseOptions.push({ label: p.name , value: p.id, duration:p.duration });
+          })
+        }
       });
 
       this.selectDoctorOptions = [];
       listSelectDoctor().then(res => {
-        if(res && res.data){}
-        res.data.forEach(p =>{
-          this.selectDoctorOptions.push({ label: (p.nickName + '('  + (p.dept && p.dept.deptName ? p.dept.deptName + '-':'' ) + p.phonenumber + ')'), value: p.userId });
-        })
+        if(res && res.data){
+          res.data.forEach(p =>{
+            this.selectDoctorOptions.push({ label: (p.nickName + '('  + (p.dept && p.dept.deptName ? p.dept.deptName + '-':'' ) + p.phonenumber + ')'), value: p.userId });
+          })
+        }
       });
     },
     resetData () {

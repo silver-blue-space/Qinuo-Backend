@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -61,6 +62,10 @@ public class QnSchedulingBatchSave {
      */
     @NotNull
     private LocalDate endDate;
+
+    /** 销售价格 */
+    @NotNull
+    private BigDecimal salesPrice;
 
     /**
      * 周几上班列表

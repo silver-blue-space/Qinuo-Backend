@@ -5,7 +5,48 @@
              :visible.sync="dialogVisible"
              :before-close="handleClose" >
     <el-form ref="form" :model="form" :rules="rules" inline label-width="80px" class="tams-form-container">
-      <el-form-item label="日期" prop="schedulDate">
+      <el-form-item label="门诊科目" prop="courseId">
+        <el-select v-model="form.courseId" value-key="id" @change="courseChange">
+          <el-option v-for="item in selectCourseOptions"
+                     :key="item.value"
+                     :label="item.label"
+                     :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="医生姓名" prop="userId">
+        <el-select v-model="form.userId">
+          <el-option
+            v-for="item in selectDoctorOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="门诊状态" prop="status">
+        <el-select v-model="form.status" placeholder="请选择门诊状态" clearable>
+          <el-option
+            v-for="dict in dict.type.sys_scheduling_status"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="售价(元)" prop="salesPrice">
+        <el-input-number
+          v-model="form.salesPrice"
+          placeholder="对外售价"
+          :min="1"
+          :max="888888"
+          :precision="2"
+          clearable
+        />
+      </el-form-item>
+
+      <el-form-item label="门诊日期" prop="schedulDate">
         <el-date-picker v-model="form.schedulDate"
                         type="date"
                         value-format="yyyy-MM-dd"
@@ -13,6 +54,7 @@
                         :picker-options="datesPickerOptions"
                         class="tams-form-item"></el-date-picker>
       </el-form-item>
+
       <el-form-item label="预约上限" prop="ticketCount">
         <el-input-number
           v-model="form.ticketCount"
@@ -22,26 +64,7 @@
           clearable
         />
       </el-form-item>
-      <br/>
-      <el-form-item label="门诊科目" prop="courseId">
-        <el-select v-model="form.courseId" value-key="id" class="tams-form-item" @change="courseChange">
-            <el-option v-for="item in selectCourseOptions"
-                       :key="item.value"
-                       :label="item.label"
-                       :value="item.value">
-            </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="医生姓名" prop="userId">
-        <el-select v-model="form.userId" class="tams-form-item">
-          <el-option
-            v-for="item in selectDoctorOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+
       <el-form-item label="时间" prop="attendTime">
         <el-time-select :clearable="false"
                         style="width: 210px;"
@@ -80,6 +103,7 @@ import { listSelectCourse } from "@/api/doctor/course";
 
 export default {
   name: 'UpdateCourseScheduling',
+  dicts: ['sys_scheduling_status'],
   props: {
     visible: {
       type: Boolean
@@ -148,6 +172,20 @@ export default {
           {
             required: true,
             message: '门诊结束时间不能为空',
+            trigger: 'blur'
+          }
+        ],
+        status: [
+          {
+            required: true,
+            message: '门诊状态不能为空',
+            trigger: 'blur'
+          }
+        ],
+        salesPrice: [
+          {
+            required: true,
+            message: '对外售价不能为空',
             trigger: 'blur'
           }
         ]

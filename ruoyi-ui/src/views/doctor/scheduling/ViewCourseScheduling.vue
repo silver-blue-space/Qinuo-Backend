@@ -4,23 +4,31 @@
                :visible.sync="dialogVisible"
                :before-close="handleClose" >
       <el-form ref="form" :model="form" inline label-width="80px" class="tams-form-container">
-        <el-form-item label="日期">
-          <el-input v-model="form.schedulDate" class="tams-form-item" readonly></el-input>
-        </el-form-item>
-        <el-form-item label="预约上限">
-          <el-input v-model="form.ticketCount" class="tams-form-item" readonly></el-input>
-        </el-form-item>
         <el-form-item label="门诊科目">
-          <el-input v-model="courses[form.courseId]" class="tams-form-item" readonly></el-input>
+          <span>{{courses[form.courseId] || form.courseId }}</span>
         </el-form-item>
         <el-form-item label="医生姓名">
-          <el-input v-model="doctors[form.userId]" class="tams-form-item" readonly></el-input>
+          <span>{{doctors[form.userId] || form.userId }}</span>
         </el-form-item>
+        <el-form-item label="门诊状态">
+          <dict-tag :options="dict.type.sys_scheduling_status" :value="form.status"/>
+        </el-form-item>
+        <br>
+        <el-form-item label="门诊日期">
+          <span>{{form.schedulDate}}</span>
+        </el-form-item>
+        <el-form-item label="预约上限">
+          <span>{{form.ticketCount}}</span>
+        </el-form-item>
+        <el-form-item label="售价(元)">
+          <span>{{form.salesPrice}}</span>
+        </el-form-item>
+        <br>
         <el-form-item label="门诊开始">
-          <el-input v-model="form.attendTime" class="tams-form-item" readonly></el-input>
+          <span>{{form.attendTime}}</span>
         </el-form-item>
         <el-form-item label="门诊结束">
-          <el-input v-model="form.finishTime" class="tams-form-item" readonly></el-input>
+          <span>{{form.finishTime}}</span>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -44,6 +52,7 @@ import { getScheduling,delScheduling } from "@/api/doctor/scheduling";
 
 export default {
   name: 'ViewCourseScheduling',
+  dicts: ['sys_scheduling_status'],
   components: { UpdateCourseScheduling },
   props: {
     visible: {

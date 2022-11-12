@@ -256,8 +256,10 @@ export default {
       let res =  await listSelectDoctor();
       if(res && res.data){
         res.data.forEach(p =>{
-          this.doctorOptions[p.userId] = p.nickName;
-          this.selectDoctorOptions.push({ label: (p.nickName + '('  + (p.dept && p.dept.deptName ? p.dept.deptName + '-':'' ) + p.phonenumber + ')'), value: p.userId });
+          if(!this.doctorOptions[p.userId]){
+            this.doctorOptions[p.userId] = p.nickName;
+            this.selectDoctorOptions.push({ label: (p.nickName + '('  + (p.dept && p.dept.deptName ? p.dept.deptName + '-':'' ) + p.phonenumber + ')'), value: p.userId });
+          }
         });
       }
     },
@@ -267,8 +269,10 @@ export default {
       let res = await listSelectCourse();
       if(res && res.data){
         res.data.forEach(p =>{
-          this.courseOptions[p.id] = p.name;
-          this.selectCourseOptions.push({ label: p.name , value: p.id });
+          if(!this.courseOptions[p.id]){
+            this.courseOptions[p.id] = p.name;
+            this.selectCourseOptions.push({ label: p.name , value: p.id });
+          }
         });
       }
     },
