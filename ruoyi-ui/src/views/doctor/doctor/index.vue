@@ -95,8 +95,11 @@
 
     <el-table v-loading="loading" :data="doctorList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
-      <el-table-column label="用户id" align="center" prop="sysUserId" />
+      <el-table-column label="医生姓名" align="center" prop="sysUserId" >
+        <template slot-scope="scope">
+          {{doctorOptions[scope.row.sysUserId] || scope.row.sysUserId}}
+        </template>
+      </el-table-column>
       <el-table-column label="职称" align="center" prop="title">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_doctor_title" :value="scope.row.title"/>
@@ -257,6 +260,7 @@ export default {
   dicts: ['sys_yes_no', 'sys_normal_disable', 'sys_doctor_title'],
   data() {
     return {
+      doctorOptions: {},
       allUserListOptions: [],
       selectDoctorOptions: [],
       // 遮罩层
@@ -314,9 +318,11 @@ export default {
     // 查询表数据
     getDoctorList() {
       this.selectDoctorOptions = [];
+      this.doctorOptions = {};
       listSelectDoctor().then(res => {
         if(res && res.data){}
         res.data.forEach(p =>{
+          this.doctorOptions[p.userId] = p.nickName;
           this.selectDoctorOptions.push({ label: (p.nickName + '('  + (p.dept && p.dept.deptName ? p.dept.deptName + '-':'' ) + p.phonenumber + ')'), value: p.userId });
         })
       });

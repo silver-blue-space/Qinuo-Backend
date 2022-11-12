@@ -32,6 +32,7 @@
     </el-row>
     <!--Calender area -->
     <FullCalendar
+      v-if="selectDoctorOptions && selectCourseOptions"
       ref="fullCalendarRef"
       :options="calendarOptions">
     </FullCalendar>
@@ -183,19 +184,34 @@ export default {
     };
   },
    created() {
-
+     this.init();
   },
   computed: {
   },
   async mounted () {
-   // 查询医生列表数据
-   await this.getDoctorList();
-   // 查询门诊科目列表(下拉列表)
-   await this.getCourseList();
-    // 查询排班日历数据
-    this.search();
+    await this.init();
+    //在mounted 声明周期中创建定时器
+    const timer = setInterval(()=>{
+      // 这里调用调用需要执行的方法，1为自定义的参数，由于特殊的需求它将用来区分，定时器调用和手工调用，然后执行不同的业务逻辑
+      this.$cache.session.set("schedulingStartDate",'');
+      this.$cache.session.set("schedulingEndDate",'');
+      this.search();
+    }, 1000) // 每两秒执行1次
+    // 通过$once来监听定时器，在beforeDestroy钩子可以被清除
+    this.$once('hook:beforeDestroy',()=>{
+      // 在页面销毁时，销毁定时器
+      clearInterval(timer)
+    });
   },
   methods: {
+    async init(){
+      // 查询医生列表数据
+      await this.getDoctorList();
+      // 查询门诊科目列表(下拉列表)
+      await this.getCourseList();
+      // 查询排班日历数据
+      await this.search();
+    },
     /** 批量排班更新成功排班列表 */
     saveBatchSuccess(){
       this.search()
@@ -207,7 +223,13 @@ export default {
         return;
       }
       let startDate = moment(this.$refs.fullCalendarRef.getApi().view.currentStart).format('YYYY-MM-DD');
-      let endDate = moment(this.$refs.fullCalendarRef.getApi().view.currentEnd).endOf('month').format('YYYY-MM-DD');
+      let endDate = moment(this.$refs.fullCalendarRef.getApi().view.currentEnd).format('YYYY-MM-DD');
+      let cacheStartDate =  this.$cache.session.get("schedulingStartDate") || '';
+      let cacheEndDate =  this.$cache.session.get("schedulingEndDate") || '';
+      if(cacheStartDate  && cacheStartDate === startDate  &&
+        cacheEndDate && cacheEndDate === endDate){
+        return;
+      }
       listCalendarSchedulingList(this.addDateRange(this.params, [startDate,endDate])).then(res => {
         if (res && res.data) {
           this.calendarOptions.events = [];
@@ -222,6 +244,8 @@ export default {
               backgroundColor: item.backgroundColor,
             })
           })
+          this.$cache.session.set("schedulingStartDate",startDate);
+          this.$cache.session.set("schedulingEndDate",endDate);
         }
       }).catch(() => {
       })
@@ -268,14 +292,14 @@ export default {
           html: `<div class="fc-scrollgrid-sync-inner">
                     <a class="fc-col-header-cell-cushion"
                         data-navlink="{&quot;date&quot;:&quot;${moment(info.date).format('YYYY-MM-DD')}&quot;,&quot;type&quot;:&quot;day&quot;}" tabindex="0">${info.text}</a>
-                    <span id="tams-course-count-${moment(info.date).format('YYYY-MM-DD')}" style="cursor: default;">${this.getCourseCount(info.date)}</span>预约
+                    <span id="tams-course-count-${moment(info.date).format('YYYY-MM-DD')}" style="cursor: default;">${this.getCourseCount(info.date)}</span>排班
                 </div>`
         }
       } else if (info.view.type === 'dayGridDay') {
         return {
           html: `<div class="fc-scrollgrid-sync-inner">
                      <a class="fc-col-header-cell-cushion">${info.text}</a>
-                     <span id="tams-course-count-${moment(info.date).format('YYYY-MM-DD')}" style="cursor: default;">${this.getCourseCount(info.date)}</span>预约
+                     <span id="tams-course-count-${moment(info.date).format('YYYY-MM-DD')}" style="cursor: default;">${this.getCourseCount(info.date)}</span>排班
                  </div>`
         }
       } else if (info.view.type === 'listWeek') {
