@@ -99,7 +99,7 @@ public class QnOrderEntity extends RichEntity {
 
   @TableField(
       value = "payment_way",
-      desc = "支付方式1、货到付款；2、在线支付"
+      desc = "支付方式1、线下支付；2、在线支付"
   )
   private String paymentWay;
 

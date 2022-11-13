@@ -12,7 +12,20 @@ import java.util.List;
 @ConfigurationProperties(prefix = "wechat.ma")
 public class WxMaProperties {
 
+    /**
+     * 小程序配置信息
+     */
     private List<Config> configs;
+
+    /**
+     * 支付回调域名
+     */
+    private String notifyHost;
+
+    /**
+     * 支付回调服务器IP
+     */
+    private String spbillCreateIp;
 
     @Data
     public static class Config {

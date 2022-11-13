@@ -65,4 +65,43 @@ public interface IQnOrderService
      * @return 结果
      */
     public int deleteQnOrderById(Long id);
+
+    /**
+     * 检查订单过期时间
+     * @param order
+     */
+    void checkOutTime(QnOrder order);
+
+    /**
+     * 小程序创建订单
+     * @param orderInfo
+     * @return
+     */
+    QnOrder createOrder(QnOrder orderInfo);
+
+    /**
+     * 逻辑删除订单
+     * @param id
+     * @return
+     */
+    int logicDeleteById(Long id);
+
+    /**
+     * 取消订单
+     * @param order
+     */
+    Boolean orderCancel(QnOrder order);
+
+    /**
+     * 门诊完成
+     * @param orderInfo
+     * @return
+     */
+    Boolean orderReceive(QnOrder orderInfo);
+
+    /**
+     * 订单支付处理
+     * @param orderInfo
+     */
+    void notifyOrder(QnOrder orderInfo);
 }

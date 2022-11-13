@@ -11,6 +11,7 @@ import com.qinuo.entity.WxUserEntity;
 import com.qinuo.service.WxUserService;
 import com.qinuo.utils.ThirdSessionHolder;
 import com.qinuo.utils.WxMaUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -22,12 +23,13 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  *  小程序用户
- *
+ *  基于 封装SDK https://gitee.com/binary/weixin-java-tools.git
  */
 @Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/weixin/api/ma/wxuser")
+@Api(value = "WxUserApi", tags = "小程序用户管理API")
 public class WxUserApi {
 
 	@Autowired
@@ -40,7 +42,7 @@ public class WxUserApi {
 	 */
 	@ApiOperation("小程序用户登录")
 	@PostMapping("/login")
-	@ApiImplicitParam(name = "loginMaDTO", value = "用户登录", required = true, dataTypeClass = LoginMaDTO.class)
+	@ApiImplicitParam(name = "loginMaDTO", required = true, dataTypeClass = LoginMaDTO.class,dataType = "LoginMaDTO" )
 	public AjaxResult login(HttpServletRequest request, @RequestBody LoginMaDTO loginMaDTO){
 		try {
 			WxUserEntity wxUser = wxUserService.loginMa(WxMaUtil.getAppId(request),loginMaDTO.getJsCode());
@@ -70,6 +72,7 @@ public class WxUserApi {
 	 */
 	@ApiOperation("保存用户信息")
 	@PostMapping
+	@ApiImplicitParam(name = "wxOpenDataDTO", required = true, dataTypeClass = WxOpenDataDTO.class,dataType = "WxOpenDataDTO" )
 	public AjaxResult saveOrUptateWxUser(@RequestBody WxOpenDataDTO wxOpenDataDTO){
 		wxOpenDataDTO.setAppId(ThirdSessionHolder.getThirdSession().getAppId());
 		wxOpenDataDTO.setUserId(ThirdSessionHolder.getThirdSession().getWxUserId());

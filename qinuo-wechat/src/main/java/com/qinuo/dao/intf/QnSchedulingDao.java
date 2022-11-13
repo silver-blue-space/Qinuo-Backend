@@ -1,6 +1,7 @@
 package com.qinuo.dao.intf;
 
 import cn.org.atool.fluent.mybatis.base.IBaseDao;
+import com.qinuo.domain.QnOrder;
 import com.qinuo.domain.QnScheduling;
 import com.qinuo.entity.QnSchedulingEntity;
 

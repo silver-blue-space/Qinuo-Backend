@@ -133,6 +133,10 @@ xss:
 wechat:
   # 公众号配置
   mp:
+    # 支付、物流回调地址，即后台服务7500端口的外网访问域名，要保证外网能访问
+    notifyHost: http://xx.xxxx.com
+    # 调用当前支付的服务ip
+    spbillCreateIp: 127.0.0.1
     configs:
       - appId: xxxxxxxx
         secret: xxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -140,6 +144,10 @@ wechat:
         aesKey: xxxxxxxxxxxxxxxxxxxx
   # 小程序配置
   ma:
+    # 支付、物流回调地址，即后台服务7500端口的外网访问域名，要保证外网能访问
+    notifyHost: http://xx.xxxx.com
+    # 调用当前支付的服务ip
+    spbillCreateIp: 127.0.0.1
     configs:
       - appId: xxxxxxxxxxxxxxxx
         secret: xxxxxxxxxxxxx

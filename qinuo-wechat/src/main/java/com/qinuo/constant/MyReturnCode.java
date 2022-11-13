@@ -3,7 +3,6 @@ package com.qinuo.constant;
 /**
  * 全局返回码
  * 小程序用6开头，例60001
- * @author www.joolun.com
  * 2019年7月25日
  */
 public enum MyReturnCode {

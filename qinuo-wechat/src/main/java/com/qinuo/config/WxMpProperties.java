@@ -14,7 +14,18 @@ import java.util.List;
 @Data
 @ConfigurationProperties(prefix = "wechat.mp")
 public class WxMpProperties {
+
     private List<MpConfig> configs;
+
+    /**
+     * 支付回调域名
+     */
+    private String notifyHost;
+
+    /**
+     * 支付回调服务器IP
+     */
+    private String spbillCreateIp;
 
     @Data
     public static class MpConfig {

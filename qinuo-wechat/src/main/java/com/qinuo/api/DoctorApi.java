@@ -31,10 +31,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Api("医生信息管理")
 @Anonymous
 @RestController
 @RequestMapping("/weixin/api/ma/doctor")
+@Api(value = "DoctorApi", tags = "医生信息管理Api")
 public class DoctorApi {
 
     @Autowired

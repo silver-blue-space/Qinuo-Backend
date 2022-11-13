@@ -8,6 +8,7 @@ import com.qinuo.common.utils.DateUtils;
 import com.qinuo.common.utils.StringUtils;
 import com.qinuo.dao.base.QnSchedulingBaseDao;
 import com.qinuo.dao.intf.QnSchedulingDao;
+import com.qinuo.domain.QnOrder;
 import com.qinuo.domain.QnScheduling;
 import com.qinuo.entity.QnSchedulingEntity;
 import com.qinuo.wrapper.QnSchedulingQuery;

@@ -7,6 +7,7 @@ import java.util.Date;
 
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -70,6 +71,12 @@ public class QnScheduling extends BaseEntity
     /** 销售价格 */
     @Excel(name = "销售价格")
     private BigDecimal salesPrice;
+
+    /**
+     * 销量
+     */
+    @Excel(name = "销量")
+    private Integer saleNum;
 
     @Override
     public String toString() {

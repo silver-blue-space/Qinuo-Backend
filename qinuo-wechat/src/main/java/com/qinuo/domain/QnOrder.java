@@ -2,7 +2,10 @@ package com.qinuo.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
+import cn.org.atool.fluent.mybatis.annotation.TableField;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -18,6 +21,7 @@ import com.qinuo.common.core.domain.BaseEntity;
  */
 @Data
 @Accessors(chain = true)
+@ApiModel(value = "QnOrder",description = "微信用户订单信息")
 public class QnOrder extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -27,26 +31,31 @@ public class QnOrder extends BaseEntity
 
     /** 微信id */
     @Excel(name = "微信id")
+    @ApiModelProperty(value = "微信用户id")
     private String wxUserId;
 
     /** 门诊ID */
     @Excel(name = "门诊ID")
+    @ApiModelProperty(value = "门诊ID")
     private Long schedulingId;
 
     /** 订单单号 */
     @Excel(name = "订单单号")
     private String orderNo;
 
-    /** 支付方式1、货到付款；2、在线支付 */
-    @Excel(name = "支付方式1、货到付款；2、在线支付")
+    /** 支付方式1、线下支付；2、在线支付 */
+    @Excel(name = "支付方式1、线下支付；2、在线支付")
+    @ApiModelProperty(value = "支付方式")
     private String paymentWay;
 
     /** 是否支付0、未支付 1、已支付 */
     @Excel(name = "是否支付0、未支付 1、已支付")
+    @ApiModelProperty(value = "是否支付")
     private String isPay;
 
     /** 订单状态1、待发货 2、待收货 3、确认收货/已完成 5、已关闭 */
     @Excel(name = "订单状态1、待发货 2、待收货 3、确认收货/已完成 5、已关闭")
+    @ApiModelProperty(value = "订单状态")
     private String status;
 
     /** 运费金额 */
@@ -74,7 +83,23 @@ public class QnOrder extends BaseEntity
     private String userMessage;
 
     /** 支付交易ID */
+    @ApiModelProperty(value = "支付交易ID")
     private String transactionId;
+
+    /**
+     * 订单状态过期时间
+     */
+    private Long outTime;
+
+    /**
+     * 删除字段
+     */
+    private Boolean isDeleted;
+
+    /**
+     * 门诊科目ID
+     */
+    private Long courseId;
 
     @Override
     public String toString() {

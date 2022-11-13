@@ -2,7 +2,7 @@ package com.qinuo.interceptor;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.qinuo.config.CommonConstants;
+import com.qinuo.constant.CommonConstants;
 import com.qinuo.constant.ConfigConstant;
 import com.qinuo.constant.MyReturnCode;
 import com.qinuo.constant.WxMaConstants;

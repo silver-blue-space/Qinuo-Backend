@@ -1,4 +1,4 @@
-package com.qinuo.config;
+package com.qinuo.constant;
 
 /**
  * @author
